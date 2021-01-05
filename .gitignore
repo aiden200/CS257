@@ -95,7 +95,8 @@ ipython_config.py
 __pypackages__/
 
 # Celery stuff
-celerybeat-schedule
+celerybea
+t-schedule
 celerybeat.pid
 
 # SageMath parsed files
@@ -126,4 +127,5 @@ venv.bak/
 dmypy.json
 
 # Pyre type checker
-.pyre/
+.DS_Store
+
