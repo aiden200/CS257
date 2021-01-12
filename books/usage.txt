@@ -11,7 +11,7 @@ Searches for and displays all authors containing the string **author name**. For
 
 python3 books.py [--year | -y] <start year> <end year>
 Example: python3 books.py -y 1890 1900
-Searches for and displays all books published between the **start year** and the **end year** (inclusive). 
+Searches for and displays all books published between the **start year** and the **end year** (inclusive). The **start year** must be smaller then the **end year**. 
 
 python3 books.py [--help | -h]
 Displays the usage and examples of the commands.  
