@@ -1,6 +1,8 @@
 Command line Syntax
 By: Aiden Chang, Duc Nguyen
 
+The program can only take 1 argument at the same time
+
 python3 books.py [--title | -t] <"book title"> 
 Example: python3 books.py -t "Mobi"
 Searches for and displays all books containing the string **book title**. The string is case sensitive and all spaces must be included. Must contain quotation marks.
@@ -19,4 +21,4 @@ Displays the usage and examples of the commands.
 python3 books.py [-multisearch| -ms]
 After the command is typed in, a prompt will appear and ask for the user input. 
 After the first prompt appears, type in the author's name you wish to search. Doing the same for the book title for the second prompt and the starting and ending year for the third prompt. 
-The input is case sensitive, and no need for quotation marks. Typing exit() will allow the user to abort the search and exit at any moment. Typing -0 will allow the user to skip the current prompt. After all three prompts, all the books fitting all three criteria will be displayed. 
+The input is case sensitive, and no need for quotation marks. Typing exit() will allow the user to abort the search and exit at any moment. Press Enter will allow the user to skip the current prompt. After all three prompts, all the books fitting all three criteria will be displayed. 
