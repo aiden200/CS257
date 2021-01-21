@@ -66,7 +66,7 @@ def get_books_matching_title(search_str, search_file):
 
 
 
-def print_titles(search_str, print_file):
+def print_books_matching_title(search_str, print_file):
   """
   Formatted the print result of the title query
 
@@ -283,7 +283,7 @@ def main():
     print("There are too many arguments are being passed. Please use the multisearch feature.")
   
   elif (parsed_args.title != None):
-    print_titles(parsed_args.title[0], aParser)
+    print_books_matching_title(parsed_args.title[0], aParser)
   elif (parsed_args.author != None):
     print_books_by_author(parsed_args.author[0], aParser)
   elif (parsed_args.year != None):
