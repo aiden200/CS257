@@ -22,3 +22,6 @@ python3 books.py [-multisearch| -ms]
 After the command is typed in, a prompt will appear and ask for the user input. 
 After the first prompt appears, type in the author's name you wish to search. Doing the same for the book title for the second prompt and the starting and ending year for the third prompt. 
 The input is case sensitive, and no need for quotation marks. Typing exit() will allow the user to abort the search and exit at any moment. Press Enter will allow the user to skip the current prompt. After all three prompts, all the books fitting all three criteria will be displayed. 
+
+python3 books.py [--file | -f]
+Get the file of to search in, default is books.csv
