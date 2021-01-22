@@ -86,7 +86,6 @@ def get_books_matching_title(search_str, books_list):
   books_with_authors = {}
   for book in books_list:
     '''Check if the book's title has search string'''
-    print(book)
     if search_str in book["title"]:
       books_with_authors[book["title"]] = book["author"]
   return books_with_authors
