@@ -46,6 +46,7 @@ def get_parsed_args():
 def build_books_list(search_file):
   """
   Get a list of books from the specify file
+
   Parameters:
     search_file: The file to search in.
   Returns:
@@ -75,6 +76,7 @@ def build_books_list(search_file):
 def get_books_matching_title(search_str, books_list):
   """
   Get a dictionary of books and their authors based on search string
+
   Parameters:
     search_str: String to search for(case-sensitive).
     books_list: The list of book to search in
@@ -95,6 +97,7 @@ def get_books_matching_title(search_str, books_list):
 def print_books_matching_title(books_with_authors):
   """
   Formatted the print result of the title query
+
   Parameters:
     books_with_authors: A dictionary of books with their authors
   """
@@ -107,6 +110,7 @@ def print_books_matching_title(books_with_authors):
 def get_author_with_books(search_str, books_list):
   """
   Get a dictionary of books and their authors based on search string
+
   Parameters:
     search_str: String to search for(case-sensitive).
     books_list: The list of book to search in
@@ -130,6 +134,7 @@ def get_author_with_books(search_str, books_list):
 def print_author_with_books(authors_with_books):
   """
   Formatted the print result of the author query
+
   Parameters:
     authors_with_books: A dictionary of authors with their books.
   """
@@ -144,6 +149,7 @@ def print_author_with_books(authors_with_books):
 def get_books_by_years(start_year, end_year, books_list):
   """
   Get a dictionary of books and their published based on a range of year
+
   Parameters:
     start_year: The lower bound of the search range.
     end_year: The upper bound of the search range.
@@ -163,6 +169,7 @@ def get_books_by_years(start_year, end_year, books_list):
 def print_books_by_years(books_with_years):
   """
   Formatted the print result of the published year query
+
   Parameters:
     books_with_years: A dictionary of books with their publised year.
   """
@@ -175,6 +182,7 @@ def print_books_by_years(books_with_years):
 def get_input_for_multi_search():
   """
   Get the input of the user to perform multisearch
+
   Return:
     user_input: a dictionary of type of user input
   """
@@ -221,6 +229,7 @@ def get_input_for_multi_search():
 def get_books_by_multi_search(user_input, books_list):
   """
   Get a list of books based on multiple characteristic
+
   Parameters:
     user_input: A dictionary based on what the user type input
     books_list: The list of book to search from
@@ -242,6 +251,7 @@ def get_books_by_multi_search(user_input, books_list):
 def print_books_by_multi_search(books_list_multisearch):
   """
   Formatted the print result of the multisearch query
+  
   Parameters:
     books_list: The list of books to print out
   """
