@@ -1,6 +1,6 @@
 '''
     olympics-api.py
-    Aiden Chang, 1 Febuary 2021
+    Aiden Chang, Daniel Kim 1 Febuary 2021
     Updated 1 Febuary 2021
 
     Retreiving results from database olympics using api
@@ -88,7 +88,12 @@ def get_nocs():
     #localhost:5000/medalists/games/12?noc=USA
 def get_medalists(games_id):
     '''
-
+    Returns the list of dictionaries each representing one athlete 
+    who earned a medal in the specified games. If the GET parameter 
+    noc=noc_abbreviation is present, this endpoint will return
+    only those medalists who were on the specified NOC's team during 
+    the specified games.
+    See \help for details
     '''
     noc = flask.request.args.get('noc')
     connection = connect_to_database()
