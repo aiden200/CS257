@@ -36,7 +36,7 @@ def get_games():
     connection = connect_to_database()
 
     query = "\
-        SELECT games.id, games.game_year, games.season, cities.city_name\
+        SELECT DISTINCT games.id, games.game_year, games.season, cities.city_name\
         FROM games, cities, games_cities\
         WHERE games.id = games_cities.game_id\
         AND cities.id = games_cities.city_id\
@@ -67,7 +67,7 @@ def get_nocs():
     connection = connect_to_database()
     
     query = "\
-        SELECT nocs.noc_name, nocs.region\
+        SELECT DISTINCT nocs.noc_name, nocs.region\
         FROM nocs\
         ORDER BY nocs.noc_name;\
         "
@@ -84,19 +84,21 @@ def get_nocs():
     connection.close()
     return json.dumps(return_list)
 
-@app.route('/medalists/games/<games_id>?[noc=noc_abbreviation]')
+@app.route('/medalists/games/<games_id>')
+    #localhost:5000/medalists/games/12?noc=USA
 def get_medalists(games_id):
     '''
-    
+
     '''
     noc = flask.request.args.get('noc')
     connection = connect_to_database()
     query = f"\
-        SELECT athletes.id, athletes.full_name, athletes.sex, events.sport, events.event_name, medals.medal\
+        SELECT DISTINCT athletes.id, athletes.full_name, athletes.sex, events.sport, events.event_name, medals.medal\
         FROM medals, events, games, athletes, nocs, athletes_nocs\
         WHERE medals.game_id = {games_id}\
         AND athletes.id = medals.athlete_id\
         AND events.id = medals.event_id\
+        AND medals.medal != 'NA'\
         "
         
 
@@ -105,7 +107,7 @@ def get_medalists(games_id):
             AND athletes.id = athletes_nocs.athlete_id \
             AND nocs.id = athletes_nocs.noc_id"
     
-    query = query + ';' # Do I need this?
+    query = query + ';'
 
     cursor = getCursor(query, connection)
     return_list = []
