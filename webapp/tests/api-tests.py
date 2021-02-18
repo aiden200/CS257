@@ -23,18 +23,22 @@ class ApiEndpointTester(unittest.TestCase):
         self.assertTrue(self.api_endpoint.get_total_cases(), 0)
         self.assertIsNotNone(self.api_endpoint.get_total_cases())
         self.assertTrue(self.api_endpoint.get_total_cases('california')) #empty lists or dics evaluate to false
-        self.assertIsTrue(self.api_endpoint.get_total_cases("california"))
-        self.assertRaise(ValueError,api_endpoint.gettotal_cases,'californiaadadada')
+        self.assertRaise(ValueError,api_endpoint.get_total_cases,'californiaadadada')
 
     #testing REQUEST: /total_vaccinations?region_contains={state_keyword}
     def test_get_vaccinations(self):
-        self.assertTrue(self.api_endpoint.get_total_cases(), 0)
-        self.assertIsNotNone(self.api_endpoint.get_total_cases())
-        self.assertTrue(self.api_endpoint.get_total_cases('california')) #empty lists or dics evaluate to false
-        self.assertIsTrue(self.api_endpoint.get_total_cases('california'))
-        self.assertRaise(ValueError,api_endpoint.gettotal_cases,'californiaadadada')
+        self.assertTrue(self.api_endpoint.get_total_vaccinations(), 0)
+        self.assertIsNotNone(self.api_endpoint.get_total_vaccinations())
+        self.assertTrue(self.api_endpoint.get_total_vaccinations('california')) #empty lists or dics evaluate to false
+        self.assertRaise(ValueError,api_endpoint.get_total_vaccinations,'californiaadadada')
 
 
     #testing REQUEST: /cases_by_date?region_name={state}
     def test_get_cases_by_date(self):
+        self.assertTrue(self.api_endpoint.get_cases_by_date())
+        self.assertTrue(self.api_endpoint.get_cases_by_date('california')) #empty lists or dics evaluate to false
+        self.assertTrue(self.api_endpoint.get_cases_by_date('california', '12/07/2021'))
+        self.assertRaise(ValueError,api_endpoint.get_cases_by_date,'californiaadadada')
+        self.assertRaise(ValueError,api_endpoint.get_cases_by_date,'californiaadadada','12/07/2021')
+
         
