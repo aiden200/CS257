@@ -21,14 +21,12 @@ class ApiEndpointTester(unittest.TestCase):
     #testing REQUEST: /total_cases?region_contains={state_keyword}
     def test_get_cases(self):
         self.assertTrue(self.api_endpoint.get_total_cases(), 0)
-        self.assertIsNotNone(self.api_endpoint.get_total_cases())
         self.assertTrue(self.api_endpoint.get_total_cases('california')) #empty lists or dics evaluate to false
         self.assertRaise(ValueError,api_endpoint.get_total_cases,'californiaadadada')
 
     #testing REQUEST: /total_vaccinations?region_contains={state_keyword}
     def test_get_vaccinations(self):
         self.assertTrue(self.api_endpoint.get_total_vaccinations(), 0)
-        self.assertIsNotNone(self.api_endpoint.get_total_vaccinations())
         self.assertTrue(self.api_endpoint.get_total_vaccinations('california')) #empty lists or dics evaluate to false
         self.assertRaise(ValueError,api_endpoint.get_total_vaccinations,'californiaadadada')
 
