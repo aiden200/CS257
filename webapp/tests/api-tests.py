@@ -1,6 +1,6 @@
 '''
    api-tests.py
-   Aiden Chang, 18 Feb 2021
+   Aiden Chang, Silas Zhao 18 Feb 2021
    Testing api for covid website project 
    CS257 winter2021
 '''
