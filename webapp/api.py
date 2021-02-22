@@ -30,10 +30,10 @@ def get_total_cases():
 
     user_input = '%' + contain_string + '%'
     query = "\
-        SELECT DISTINCT vaccinations_in_US.state, vaccinations_in_US.vaccinations\
+        SELECT DISTINCT vaccinations_in_US.state, vaccinations_in_US.case\
         FROM vaccinations_in_US\
         WHERE vaccinations_in_US.state LIKE %s\
-        ORDER BY vaccinations_in_US.state;
+        ORDER BY vaccinations_in_US.state;\
         "
 
     cursor = getCursor(query, connection)
