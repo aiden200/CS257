@@ -30,10 +30,10 @@ def get_total_cases():
 
     user_input = '%' + contain_string + '%'
     query = "\
-        SELECT DISTINCT vaccinations_in_US.state, vaccinations_in_US.vaccinations\
+        SELECT DISTINCT vaccinations_in_US.state, vaccinations_in_US.cases\
         FROM vaccinations_in_US\
         WHERE vaccinations_in_US.state LIKE %s\
-        ORDER BY vaccinations_in_US.state;
+        ORDER BY vaccinations_in_US.state;\
         "
 
     cursor = getCursor(query, connection)
@@ -50,7 +50,7 @@ def get_total_cases():
     return json.dumps(return_list)
 
 @api.route("/total_vaccinations")
-def get_total_cases():
+def get_total_vaccinations():
     ''' 
         REQUEST: /total_vaccinations?region_contains={state_keyword}
 
