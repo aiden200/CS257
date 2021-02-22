@@ -9,17 +9,19 @@
     <head>
         <title>Covid-19 Tracker</title>
         <meta charset="UTF-8">
-        <link rel="stylesheet" href="styles.css">
-        <script type="text/javascript" src=".js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
+        <script type="text/javascript" src="{{ url_for('static', filename='webapp.js') }}"></script>
     </head>
 
     <body>
         <div id = "background_boxes">
             <div id = "top_horizontal_square"> 
                 <h2>Click the button for the graph of covid-19 in the U.S</h2>
+                <p>Here's also a photo of one of our attractive authors Silas just for fun!</p>
+                <img src="{{ url_for('static', filename='silas.jpg') }}" alt="silas photo">
             </div>
         </div>
 
-        <p><button id="prizebutton">View graph</button></p>
+        <p><button id="total_cases_graph_button">View graph</button></p>
     </body>
 </html>

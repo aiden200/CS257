@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-database = 'covid_data'
+database = 'covid'
 user = 'aidenchang'
 password = ''
 
