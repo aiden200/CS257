@@ -5,7 +5,7 @@ RESPONSE: a JSON int of the total number of covid cases in America if no optiona
 	
 
 
-REQUEST: /total_vaccinations?region_contains={state_keyword}
+REQUEST: /get_total_vaccinations?region_contains={state_keyword}
 RESPONSE: a JSON int of the total number of vaccination cases in America if no optional arguments are specified. If an optional argument is specified, this will return a JSON dictionary with each state containing the state_keyword parameter as a key(string), and the value as the vaccinations for that state.
 
 
