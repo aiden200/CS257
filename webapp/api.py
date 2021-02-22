@@ -26,6 +26,7 @@ def get_total_cases():
         state_keyword parameter as a key(string), and the value as the cases for that state.
     '''
     contain_string = flask.request.args.get('region_contains', 'USA')
+    
 
 
 @api.route("/total_vaccinations")
