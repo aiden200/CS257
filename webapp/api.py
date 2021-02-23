@@ -10,6 +10,8 @@ import flask
 import json
 import config
 import psycopg2 
+import datetime
+import json
 
 api = flask.Blueprint('api', __name__)
 
@@ -30,13 +32,13 @@ def get_total_cases():
 
     user_input = '%' + contain_string + '%'
     query = "\
-        SELECT DISTINCT vaccinations_in_US.state, vaccinations_in_US.cases\
-        FROM vaccinations_in_US\
-        WHERE vaccinations_in_US.state LIKE %s\
-        ORDER BY vaccinations_in_US.state;\
+        SELECT DISTINCT cases_in_US.state, cases_in_US.cases\
+        FROM cases_in_US\
+        WHERE cases_in_US.state LIKE '%s'\
+        ORDER BY cases_in_US.state;\
         "
 
-    cursor = getCursor(query, connection)
+    cursor = getCursor(query, connection, user_input)
     return_list = []
 
     for row in cursor:
@@ -86,9 +88,23 @@ def get_cases_by_date():
             date -- (string) the requested date
             case -- (int) the cases on the date
     '''
-    region_name = flask.request.args.get('region_name', 'USA')
+    region_name = flask.request.args.get('region_name', default = 'USA')
     given_date = flask.request.args.get('given_date')
-    return None
+    connection = connect_to_database()
+    user_input_region = region_name#LIKE statement
+    user_input_date = given_date
+    #query = "SELECT state, date, cases FROM case_date WHERE state = %s AND date = %s ORDER BY cases LIMIT 20;"
+    query = "SELECT case_date.state, case_date.day, case_date.cases FROM case_date LIMIT 20;"
+    cursor = getCursor(query, connection)
+    return_list = []
+    for row in cursor:
+        row_dic = {}
+        row_dic['state'] = row[0]
+        row_dic['day'] = str(row[1])
+        row_dic['cases'] = row[2]
+        return_list.append(row_dic)
+    connection.close()
+    return json.dumps(return_list)
 
 
 def connect_to_database():
@@ -100,7 +116,7 @@ def connect_to_database():
         connection: the connection object to the database
     '''
     try:
-        connection = psycopg2.connect(database=config.database, user=congif.user, password=config.password)
+        connection = psycopg2.connect(database=config.database, user=config.user, password=config.password)
         return connection
     except Exception as e:
         print(e)
@@ -127,3 +143,4 @@ def getCursor(query, connection, search_string = None):
     except Exception as e:
         print(e)
         exit()
+

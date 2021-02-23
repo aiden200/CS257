@@ -4,6 +4,7 @@
 
 -- Dumped from database version 13.1
 -- Dumped by pg_dump version 13.1
+DROP TABLE IF EXISTS public.case_date;
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -25,8 +26,8 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.case_date (
+    day date,
     state text,
-    date text,
     cases integer
 );
 
@@ -35,7 +36,7 @@ CREATE TABLE public.case_date (
 -- Data for Name: case_date; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.case_date (state, date, cases) FROM stdin;
+COPY public.case_date (day, state, cases) FROM stdin;
 2021-02-21	AK	1561281
 2021-02-21	AL	\N
 2021-02-21	AR	2352972
@@ -4078,6 +4079,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-12-11	CT	\N
 2020-12-11	DC	\N
 2020-12-11	DE	\N
+2020-11-30	NJ	\N
 2020-12-11	FL	10653469
 2020-12-11	GA	\N
 2020-12-11	GU	\N
@@ -4504,6 +4506,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-12-04	PA	\N
 2020-12-04	PR	395291
 2020-12-04	RI	1533056
+2020-11-30	NM	\N
 2020-12-04	SC	2182682
 2020-12-04	SD	\N
 2020-12-04	TN	4195346
@@ -4718,8 +4721,6 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-11-30	ND	\N
 2020-11-30	NE	1208672
 2020-11-30	NH	\N
-2020-11-30	NJ	\N
-2020-11-30	NM	\N
 2020-11-30	NV	\N
 2020-11-30	NY	\N
 2020-11-30	OH	\N
@@ -11996,6 +11997,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-07-23	MT	\N
 2020-07-23	NC	\N
 2020-07-23	ND	\N
+2020-07-15	IA	\N
 2020-07-23	NE	282068
 2020-07-23	NH	\N
 2020-07-23	NJ	\N
@@ -12211,6 +12213,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-07-19	LA	\N
 2020-07-19	MA	\N
 2020-07-19	MD	\N
+2020-07-15	ID	\N
 2020-07-19	ME	132293
 2020-07-19	MI	1402591
 2020-07-19	MN	\N
@@ -12426,8 +12429,6 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-07-15	GA	\N
 2020-07-15	GU	\N
 2020-07-15	HI	\N
-2020-07-15	IA	\N
-2020-07-15	ID	\N
 2020-07-15	IL	\N
 2020-07-15	IN	\N
 2020-07-15	KS	\N
@@ -14360,6 +14361,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-06-11	PA	\N
 2020-06-11	PR	87930
 2020-06-11	RI	175575
+2020-06-07	NV	\N
 2020-06-11	SC	213616
 2020-06-11	SD	\N
 2020-06-11	TN	\N
@@ -14576,7 +14578,6 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-06-07	NH	\N
 2020-06-07	NJ	\N
 2020-06-07	NM	\N
-2020-06-07	NV	\N
 2020-06-07	NY	\N
 2020-06-07	OH	\N
 2020-06-07	OK	214598
@@ -16095,6 +16096,7 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-05-11	OR	95112
 2020-05-11	PA	\N
 2020-05-11	PR	\N
+2020-05-03	NJ	\N
 2020-05-11	RI	87264
 2020-05-11	SC	\N
 2020-05-11	SD	\N
@@ -16534,7 +16536,6 @@ COPY public.case_date (state, date, cases) FROM stdin;
 2020-05-03	ND	\N
 2020-05-03	NE	28774
 2020-05-03	NH	\N
-2020-05-03	NJ	\N
 2020-05-03	NM	\N
 2020-05-03	NV	\N
 2020-05-03	NY	\N

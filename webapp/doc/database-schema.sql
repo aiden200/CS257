@@ -13,9 +13,9 @@ CREATE TABLE case_date(
 	case integer
 );
 
-CREATE TABLE vaccinations_in_US(
+CREATE TABLE cases_in_US(
 	state text,
-	vaccinations int
+	cases int
 );
 
 
