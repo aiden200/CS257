@@ -64,7 +64,28 @@ def get_total_vaccinations():
         parameter as a key(string), and the value as the vaccinations for that state.
     '''
     contain_string = flask.request.args.get('region_contains', 'USA') #The second argument is the default argument
-    return None
+    connection = connect_to_database()
+
+    user_input = '%' + contain_string + '%'
+    query = "\
+        SELECT DISTINCT vaccinations_region.region, vaccinations_region.vaccination\
+        FROM vaccinations_region\
+        WHERE vaccinations_region.region LIKE '%s'\
+        ORDER BY vaccinations_region.region;\
+        "
+
+    cursor = getCursor(query, connection, user_input)
+    return_list = []
+
+    for row in cursor:
+        row_dic = {}
+        row_dic['region_name'] = row[0]
+        row_dic['vaccinations'] = row[1]
+        return_list.append(row_dic)
+    
+    connection.close()
+
+    return json.dumps(return_list)
 
 @api.route("/cases_by_date")
 def get_cases_by_date():
@@ -89,22 +110,47 @@ def get_cases_by_date():
             case -- (int) the cases on the date
     '''
     region_name = flask.request.args.get('region_name', default = 'USA')
-    given_date = flask.request.args.get('given_date')
+    given_date = flask.request.args.get('given_date','0')
     connection = connect_to_database()
-    user_input_region = region_name#LIKE statement
-    user_input_date = given_date
-    #query = "SELECT state, date, cases FROM case_date WHERE state = %s AND date = %s ORDER BY cases LIMIT 20;"
-    query = "SELECT case_date.state, case_date.day, case_date.cases FROM case_date LIMIT 20;"
-    cursor = getCursor(query, connection)
+    region_name = region_name.lower() # lowercase
+    query = ''
     return_list = []
-    for row in cursor:
-        row_dic = {}
-        row_dic['state'] = row[0]
-        row_dic['day'] = str(row[1])
-        row_dic['cases'] = row[2]
-        return_list.append(row_dic)
-    connection.close()
-    return json.dumps(return_list)
+    if given_date == '0':
+        if region_name == 'USA':
+            query = "SELECT DISTINCT case_date.date, case_date.case\
+                FROM case_date\
+                WHERE case_date.state = '%s'\
+                ORDER BY case_date.date;"
+        else:
+            query = "SELECT DISTINCT case_date.date, case_date.case\
+                FROM case_date\
+                WHERE case_date.state = '%s'\
+                ORDER BY case_date.date;"
+        cursor = getCursor(query, connection, region_name)
+        in_list = []
+        for row in cursor:
+            in_list.append(str(row[0]) + ':' + row[1])
+        in_dic = {}
+        in_dic["name"] = region_name
+        in_dic["cases_dates"] = in_list
+        return_list.append(in_dic)
+        connection.close()
+        return json.dumps(return_list)
+    else: # HAVE NOT FINISHED THIS ONE YET
+        query = "\
+            SELECT DISTINCT case_date.date, case_date.case\
+            FROM case_date\
+            WHERE case_date.state "
+        cursor = getCursor(query, connection)
+        for row in cursor:
+            row_dic = {}
+            row_dic['name'] = row[0]
+            row_dic['date'] = str(row[1])
+            row_dic['case'] = row[2]
+            return_list.append(row_dic)
+        connection.close()
+        return json.dumps(return_list)
+    
 
 
 def connect_to_database():
