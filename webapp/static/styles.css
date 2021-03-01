@@ -43,49 +43,15 @@ body {
     color: white;
 }
 
-#left_vertical_square {
-    width: 22.5%;
-    height: 110%;
-    float: left;
-    font-size: 24pt;
-    color: white;
-    background-color: #097e4d;
-}
+#myInput {
+    background-image: url('/static/searchicon.png'); /* Add a search icon to input we don't have this image yet????*/
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    /* Icon up to here */
+    width: 70%; /* Full-width of the search bar*/
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+  }
 
-#right_horizontal_square {
-    width: 75%;
-    height: 110%;
-    float: left;
-    font-size: 17pt;
-    font-style: inherit;
-    color: white;
-    background-color: #0000aa;
-}
-
-.s_tier {
-    font-size: 120%;
-    color: grey;
-    background-color: lightblue;
-}
-
-.a_tier {
-    font-size: 120%;
-    color: black;
-    background-color: white;
-}
-
-.b_tier {
-    font-size: 120%;
-    color: yellow;
-    background-color: blue;
-}
-
-.small {
-    font-size: 15px;
-}
-
-.under_tier {
-    font-size: 120%;
-    color: red;
-    background-color: yellow;
-}
