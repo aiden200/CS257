@@ -19,7 +19,12 @@ def home():
     return flask.render_template('home_index.html')
 @app.route('/help')
 def help():
-    return flask.render_template('readme.txt')
+    return_string = ''
+    lines = open("templates/readme.txt", "r")
+    for line in lines:
+        line = line + '<br/>'
+        return_string = return_string + line
+    return return_string
 
 @app.route('/<path:path>')
 def shared_header_catchall(path):

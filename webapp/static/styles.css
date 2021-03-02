@@ -1,0 +1,59 @@
+/*
+    olympics-api.py
+    Aiden Chang, Silas Zhao
+    Updated 22 Febuary 2021
+
+    Sample CSS code for covid-19 website
+*/
+
+body {
+    margin: 10px;
+    padding: 10px;
+}
+
+#background_boxes {
+    height: 500px;
+    width: 100%;
+}
+
+#top_horizontal_square {
+    width: 70%;
+    height: 100%;
+    float: left;
+    font-size: 24pt;
+    border: 1px solid black;
+    line-height: 2px;
+    color: blue;
+    background-color: yellowgreen;
+}
+
+#horizontal_gap {
+    width: 100%;
+    height: 5%;
+    float: left;
+    font-size: 24pt;
+    color: white;
+}
+
+#vertical_gap {
+    width: 2.5%;
+    height: 100%;
+    float: left;
+    font-size: 24pt;
+    color: white;
+}
+
+#myInput {
+    background-image: url('/static/searchicon.png'); /* Add a search icon to input we don't have this image yet????*/
+    background-position: 10px 12px; /* Position the search icon */
+    background-repeat: no-repeat; /* Do not repeat the icon image */
+    /* Icon up to here */
+    width: 70%; /* Full-width of the search bar*/
+    font-size: 16px; /* Increase font-size */
+    padding: 12px 20px 12px 40px; /* Add some padding */
+    border: 1px solid #ddd; /* Add a grey border */
+    margin-bottom: 12px; /* Add some space below the input */
+  }
+
+
+

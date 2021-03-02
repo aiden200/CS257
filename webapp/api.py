@@ -31,26 +31,35 @@ def get_total_cases():
     connection = connect_to_database()
 
     user_input = '%' + contain_string + '%'
-    
-    query = "\
-        SELECT DISTINCT cases_and_vaccination_in_US.states, cases_and_vaccination_in_US.cases\
-        FROM cases_and_vaccination_in_US\
-        WHERE cases_and_vaccination_in_US.state LIKE '%s'\
-        ORDER BY cases_and_vaccination_in_US.state;\
-        "
+    if contain_string == 'USA':
+        query = "SELECT cases\
+                FROM cases_in_US\
+                WHERE day = (SELECT MAX(day) FROM cases_in_US);"
+            
+        cursor = getCursor(query, connection)
+        return_str = '' 
+        for line in cursor:
+            return_str = line[0]
+        connection.close()
+        return json.dumps(return_str)#WORKS
+    else:
 
-    cursor = getCursor(query, connection, user_input)
-    return_list = []
+        query = "SELECT DISTINCT states, cases\
+                FROM cases_date\
+                WHERE day = (SELECT MAX(day) FROM cases_date)\
+                AND states LIKE %s;"
+        cursor = getCursor(query, connection, user_input)
+        return_list = []
 
-    for row in cursor:
-        row_dic = {}
-        row_dic['region_name'] = row[0]
-        row_dic['cases'] = row[1]
-        return_list.append(row_dic)
-    
-    connection.close()
+        for row in cursor:
+            row_dic = {}
+            row_dic['region_name'] = row[0]
+            row_dic['cases'] = row[1]
+            return_list.append(row_dic)
+        
+        connection.close()
 
-    return json.dumps(return_list)
+        return json.dumps(return_list)#WORKS
 
 @api.route("/total_vaccinations")
 def get_total_vaccinations():
@@ -64,29 +73,38 @@ def get_total_vaccinations():
         If an optional argument is specified, this will return a JSON dictionary with each state containing the state_keyword 
         parameter as a key(string), and the value as the vaccinations for that state.
     '''
-    contain_string = flask.request.args.get('region_contains', 'USA') #The second argument is the default argument
+    contain_string = flask.request.args.get('region_contains', 'USA')
     connection = connect_to_database()
 
     user_input = '%' + contain_string + '%'
-    query = "\
-        SELECT DISTINCT cases_and_vaccination_in_US.states, cases_and_vaccination_in_US.vaccination\
-        FROM cases_and_vaccination_in_US\
-        WHERE cases_and_vaccination_in_US.state LIKE '%s'\
-        ORDER BY cases_and_vaccination_in_US.state;\
-        "
+    if contain_string == 'USA':
+        query = "\
+            SELECT DISTINCT vaccinations_region.people_with_1_or_more_doses\
+            FROM vaccinations_region;"
+        cursor = getCursor(query, connection)
+        return_str = '' 
+        for line in cursor:
+            return_str = line[0]
+        connection.close()
+        return json.dumps(int(return_str)) #WORKS
+        
+    else:
+        query = "SELECT DISTINCT region, people_with_1_or_more_doses\
+        FROM vaccinations_region\
+        WHERE region LIKE %s;"
 
-    cursor = getCursor(query, connection, user_input)
-    return_list = []
+        cursor = getCursor(query, connection, user_input)
+        return_list = []
 
-    for row in cursor:
-        row_dic = {}
-        row_dic['region_name'] = row[0]
-        row_dic['vaccinations'] = row[1]
-        return_list.append(row_dic)
-    
-    connection.close()
+        for row in cursor:
+            row_dic = {}
+            row_dic['region_name'] = row[0]
+            row_dic['vaccinations'] = row[1]
+            return_list.append(row_dic)
+        
+        connection.close()
 
-    return json.dumps(return_list)
+        return json.dumps(return_list)#WORKS
 
 @api.route("/cases_by_date")
 def get_cases_by_date():
@@ -113,30 +131,107 @@ def get_cases_by_date():
     region_name = flask.request.args.get('region_name', default = 'USA')
     given_date = flask.request.args.get('given_date','0')
     connection = connect_to_database()
-    region_name = region_name.lower() # lowercase
+    #region_name = region_name.lower() # lowercase
     query = ''
     return_list = []
     if given_date == '0': #case 1 and 2
         if region_name == 'USA':
-            query = "SELECT DISTINCT cases_date.day, cases_date.cases\
-                FROM cases_date\
-                WHERE cases_date.states = '%s'\
-                ORDER BY cases_date.day;"
+            query = "SELECT DISTINCT cases_in_US.day, cases_in_US.cases\
+                FROM cases_in_US\
+                ORDER BY cases_in_US.day;"
+            cursor = getCursor(query, connection)
+            in_list = []
+            for row in cursor:
+                in_list.append(str(row[0]) + ':' + str(row[1]))
+            in_dic = {}
+            in_dic["name"] = region_name
+            in_dic["cases_dates"] = in_list
+            return_list.append(in_dic)
+            connection.close()
+            return json.dumps(return_list)#WORKS
         else:
             query = "SELECT DISTINCT cases_date.day, cases_date.cases\
                 FROM cases_date\
+                WHERE cases_date.states = %s\
+                ORDER BY cases_date.day;"
+            cursor = getCursor(query, connection, region_name)
+            in_list = []
+            for row in cursor:
+                in_list.append(str(row[0]) + ':' + str(row[1]))
+            in_dic = {}
+            in_dic["name"] = region_name
+            in_dic["cases_dates"] = in_list
+            return_list.append(in_dic)
+            connection.close()
+            return json.dumps(return_list) #works
+    else: #case 3
+        query = "\
+            SELECT DISTINCT cases_date.day, cases_date.cases\
+            FROM cases_date\
+            WHERE cases_date.states = %s\
+            AND cases_date.day = DATE(%s)\
+            ORDER BY cases_date.day;"
+        cursor = getCursor(query, connection, region_name, given_date)
+        for row in cursor:
+            row_dic = {}
+            row_dic['name'] = row[0]
+            row_dic['date'] = str(row[1])
+            row_dic['case'] = row[2]
+            return_list.append(row_dic)
+        connection.close()
+        return json.dumps(return_list) # not working
+    
+
+@api.route("/vaccinations_by_date")
+def get_vaccinations_by_date():
+    '''
+        REQUEST: /vaccinations_by_date?[region_name={state},given_date={date}]
+
+        GET parameters:
+            region_contains(optional, default:USA)
+
+        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
+        the dictionary will contain cases by day for the United States with the following fields. 
+            name -- (string) the region name                                                
+            cases_dates -- (list) list that contains the date and the vaccinations of the date given with the format of each value in the list as date:vaccinations
+            
+        If only the state optional argument is given, the dictionary will contain vaccinations by day for the specified state. The dictionary will have the following fields.
+            name -- (string) the region name
+            vaccination_dates -- (list) list that contains the date and the vaccinations of the date given with the format of each value in the list as date:vaccinations
+
+        If both optional arguments are given, the dictionary will contain the vaccinations of the specified date with the following fields.
+            name -- (string) the region name
+            date -- (string) the requested date
+            vaccinations -- (int) the vaccinations on the date
+    '''
+    region_name = flask.request.args.get('region_name', default = 'USA')
+    given_date = flask.request.args.get('given_date','0')
+    connection = connect_to_database()
+    #region_name = region_name.lower() # lowercase
+    query = ''
+    return_list = []
+    if given_date == '0': #case 1 and 2
+        if region_name == 'USA':
+            query = "SELECT DISTINCT vaccinations_in_US.day, vaccinations_in_US.people_with_1_or_more_doses\
+                FROM vaccinations_in_US\
+                ORDER BY cases_date.day;"
+            cursor = getCursor(query, connection)
+            return json.dumps(cursor[0])
+        else: # WE DONT HAVE ANYTHING FROM HERE
+            query = "SELECT DISTINCT cases_date.day, cases_date.cases\
+                FROM cases_date\
                 WHERE cases_date.states = '%s'\
                 ORDER BY cases_date.day;"
-        cursor = getCursor(query, connection, region_name)
-        in_list = []
-        for row in cursor:
-            in_list.append(str(row[0]) + ':' + row[1])
-        in_dic = {}
-        in_dic["name"] = region_name
-        in_dic["cases_dates"] = in_list
-        return_list.append(in_dic)
-        connection.close()
-        return json.dumps(return_list)
+            cursor = getCursor(query, connection, region_name)
+            in_list = []
+            for row in cursor:
+                in_list.append(str(row[0]) + ':' + row[1])
+            in_dic = {}
+            in_dic["name"] = region_name
+            in_dic["cases_dates"] = in_list
+            return_list.append(in_dic)
+            connection.close()
+            return json.dumps(return_list)
     else: #case 3
         query = "\
             SELECT DISTINCT cases_date.day, cases_date.cases\
@@ -149,12 +244,10 @@ def get_cases_by_date():
             row_dic = {}
             row_dic['name'] = row[0]
             row_dic['date'] = str(row[1])
-            row_dic['case'] = row[2]
+            row_dic['vaccinations'] = row[2]
             return_list.append(row_dic)
         connection.close()
-        return json.dumps(return_list)
-    
-
+        return json.dumps(return_list)# Not working
 
 def connect_to_database():
     '''
