@@ -25,6 +25,6 @@ CREATE TABLE cases_in_US(
 );
 CREATE TABLE vaccinations_in_US(
 	day date,
-	vaccinations integer,
-	vaccinations_increased integer
+	people_with_1_or_more_doses integer,
+	people_with_2_doses integer 
 );
