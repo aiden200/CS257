@@ -16,7 +16,10 @@ app.register_blueprint(api.api, url_prefix='/api')
 
 @app.route('/')
 def home():
-    return flask.render_template('index.html')
+    return flask.render_template('home_index.html')
+@app.route('/help')
+def help():
+    return flask.render_template('readme.txt')
 
 @app.route('/<path:path>')
 def shared_header_catchall(path):

@@ -9,11 +9,13 @@
 body {
     margin: 10px;
     padding: 10px;
+    color: beige
 }
 
 #background_boxes {
     height: 500px;
     width: 100%;
+    color: beige
 }
 
 #top_horizontal_square {
@@ -24,7 +26,7 @@ body {
     border: 1px solid black;
     line-height: 2px;
     color: blue;
-    background-color: yellowgreen;
+    background-color: beige;
 }
 
 #horizontal_gap {
@@ -44,14 +46,21 @@ body {
 }
 
 #myInput {
-    background-image: url('/static/searchicon.png'); /* Add a search icon to input we don't have this image yet????*/
-    background-position: 10px 12px; /* Position the search icon */
-    background-repeat: no-repeat; /* Do not repeat the icon image */
+    background-image: url('/static/searchicon.png');
+    /* Add a search icon to input we don't have this image yet????*/
+    background-position: 10px 12px;
+    /* Position the search icon */
+    background-repeat: no-repeat;
+    /* Do not repeat the icon image */
     /* Icon up to here */
-    width: 70%; /* Full-width of the search bar*/
-    font-size: 16px; /* Increase font-size */
-    padding: 12px 20px 12px 40px; /* Add some padding */
-    border: 1px solid #ddd; /* Add a grey border */
-    margin-bottom: 12px; /* Add some space below the input */
-  }
-
+    width: 70%;
+    /* Full-width of the search bar*/
+    font-size: 16px;
+    /* Increase font-size */
+    padding: 12px 20px 12px 40px;
+    /* Add some padding */
+    border: 1px solid #ddd;
+    /* Add a grey border */
+    margin-bottom: 12px;
+    /* Add some space below the input */
+}
