@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS vaccinations_region;
-DROP TABLE IF EXISTS case_date;
-DROP TABLE IF EXISTS vaccinations_in_US;
+DROP TABLE IF EXISTS cases_date;
+DROP TABLE IF EXISTS cases_and_vaccination_in_US;
 
 
 CREATE TABLE vaccinations_region(
@@ -12,15 +12,15 @@ CREATE TABLE vaccinations_region(
 );
 
 CREATE TABLE cases_date(
-	states text,
 	day date,
+	states text,
 	cases integer,
 	cases_increased integer
 );
 
 CREATE TABLE cases_and_vaccination_in_US(
+	day date,
 	states text,
 	cases integer,
-	cases_increased integer,
-	vaccination integer
+	cases_increased integer
 );
