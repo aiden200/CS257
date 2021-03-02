@@ -18,9 +18,13 @@ CREATE TABLE cases_date(
 	cases_increased integer
 );
 
-CREATE TABLE cases_and_vaccination_in_US(
+CREATE TABLE cases_in_US(
 	day date,
-	states text,
 	cases integer,
 	cases_increased integer
+);
+CREATE TABLE vaccinations_in_US(
+	day date,
+	vaccinations integer,
+	vaccinations_increased integer
 );
