@@ -39,50 +39,36 @@ function onCasesButton() {
 
 }
 
-function list_search() {
+function filterFunction() {
     var input = document.getElementById("myInput");
     var url = getAPIBaseURL() + '/total_cases?region_contains=' + input.value;
-    var listBody = [];
     fetch(url, {method:'get'})
+        
         .then((response) => response.json())
         .then(info => {
-            for (var k = 0; k < info.length; k++) {
-                var infos = info[k];
-                var in_list = [];
-                in_list.push(infos['region_name'],infos['cases']);
-                listBody.push(in_list);
+            var listBody = '';
+            if (info.length === 0) {listBody += "No results!"}
+            else{
+                for (var k = 0; k < info.length; k++) {
+                    var infos = info[k];
+                    listBody += '<a href="/" class="home">' + infos['region_name'] + " cases: " + infos['cases'] + '</a>' + '</br>';
+                }
             }
-            if (listBody.length === 0) {listBody.push("No results!")}
-            alert(listBody);
-            
-            return listBody;
-            
 
+            document.getElementById('list_container').innerHTML = listBody;
+            document.getElementById("home").setAttribute("class", "highlight3");
+
+        
+            
         })
 
         
     .catch(function(error) {
         console.log(error);
     });
-    alert(info)
-    return await info;
+    
     
 }
 
-function getResults() {
-    document.getElementById("myDropdown").classList.toggle("show");
-}
 
-function filterFunction() {
-    var i;
-    var a = list_search();
-    alert(a);
-    for (i = 0; i < a.length; i++) {
-      txtValue = a[i].textContent || a[i].innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = "";
-      } else {
-        a[i].style.display = "none";
-      }
-    }
-}
+
