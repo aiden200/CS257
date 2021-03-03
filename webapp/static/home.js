@@ -22,6 +22,12 @@ var extraStateInfo = {
     OH: { population: 0, jeffhaslivedthere: false, fillColor: '#aa2222' }
 };
 
+function getAPIBaseURL() {
+    var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
+    return baseURL;
+}
+
+
 function initialize() {
     initializeMap();
 }

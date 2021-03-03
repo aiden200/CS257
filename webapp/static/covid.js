@@ -35,4 +35,54 @@ function onCasesButton() {
     .catch(function(error) {
         console.log(error);
     });
+
+
+}
+
+function list_search() {
+    var input = document.getElementById("myInput");
+    var url = getAPIBaseURL() + '/total_cases?region_contains=' + input.value;
+    var listBody = [];
+    fetch(url, {method:'get'})
+        .then((response) => response.json())
+        .then(info => {
+            for (var k = 0; k < info.length; k++) {
+                var infos = info[k];
+                var in_list = [];
+                in_list.push(infos['region_name'],infos['cases']);
+                listBody.push(in_list);
+            }
+            if (listBody.length === 0) {listBody.push("No results!")}
+            alert(listBody);
+            
+            return listBody;
+            
+
+        })
+
+        
+    .catch(function(error) {
+        console.log(error);
+    });
+    alert(info)
+    return await info;
+    
+}
+
+function getResults() {
+    document.getElementById("myDropdown").classList.toggle("show");
+}
+
+function filterFunction() {
+    var i;
+    var a = list_search();
+    alert(a);
+    for (i = 0; i < a.length; i++) {
+      txtValue = a[i].textContent || a[i].innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        a[i].style.display = "";
+      } else {
+        a[i].style.display = "none";
+      }
+    }
 }
