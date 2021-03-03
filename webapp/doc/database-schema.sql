@@ -25,6 +25,11 @@ CREATE TABLE cases_in_US(
 );
 CREATE TABLE vaccinations_in_US(
 	day date,
+	total_doses_administered_daily integer,
 	people_with_1_or_more_doses integer,
-	people_with_2_doses integer 
+	people_with_2_doses integer
+);
+CREATE TABLE states_code(
+	states text,
+	code text
 );

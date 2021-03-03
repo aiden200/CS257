@@ -15,17 +15,28 @@ import json
 
 api = flask.Blueprint('api', __name__)
 
-@api.route("/total_cases")
+@api.route("/total_cases") # always USA?
 def get_total_cases():
     ''' 
         REQUEST: /total_cases?region_contains={state_keyword}
 
-        GET parameters:
+        GET parameters:x
+
+
             region_contains(optional, default: USA)
 
         RESPONSE: a JSON int of the total number of covid cases in America if no optional arguments are specified. 
         If an optional argument is specified, this will return a JSON dictionary with each state containing the 
         state_keyword parameter as a key(string), and the value as the cases for that state.
+        
+        make it case insensitive:
+        """
+        SELECT DISTINCT states_code.states, cases_date.cases
+        FROM cases_date, states_code
+        WHERE day = (SELECT MAX(day) FROM cases_date)
+        AND UPPER(states_code.states) LIKE UPPER(%s)
+        AND states_code.code = cases_date.states;
+        """
     '''
     contain_string = flask.request.args.get('region_contains', 'USA')
     connection = connect_to_database()
@@ -35,7 +46,6 @@ def get_total_cases():
         query = "SELECT cases\
                 FROM cases_in_US\
                 WHERE day = (SELECT MAX(day) FROM cases_in_US);"
-            
         cursor = getCursor(query, connection)
         return_str = '' 
         for line in cursor:
@@ -43,7 +53,6 @@ def get_total_cases():
         connection.close()
         return json.dumps(return_str)#WORKS
     else:
-
         query = "SELECT DISTINCT states, cases\
                 FROM cases_date\
                 WHERE day = (SELECT MAX(day) FROM cases_date)\
@@ -91,7 +100,7 @@ def get_total_vaccinations():
     else:
         query = "SELECT DISTINCT region, people_with_1_or_more_doses\
         FROM vaccinations_region\
-        WHERE region LIKE %s;"
+        WHERE UPPER(region) LIKE UPPER(%s);"
 
         cursor = getCursor(query, connection, user_input)
         return_list = []
@@ -130,6 +139,7 @@ def get_cases_by_date():
     '''
     region_name = flask.request.args.get('region_name', default = 'USA')
     given_date = flask.request.args.get('given_date','0')
+    print(given_date)
     connection = connect_to_database()
     #region_name = region_name.lower() # lowercase
     query = ''

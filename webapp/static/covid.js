@@ -1,3 +1,5 @@
+window.onload = initialize;
+
 function initialize() {
     var element = document.getElementById('total_cases_graph_button');
     element.onclick = onCasesButton;
@@ -10,29 +12,23 @@ function getAPIBaseURL() {
 
 function onCasesButton() {
     var url = getAPIBaseURL() + '/cases_by_date';
-
-
     fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(function(info) {
+            var listBody = '';
+            for (var k = 0; k < info.length; k++) {
+                var infos = info[k];
+                listBody += '<li>' + infos['state'] +
+                    ', ' + infos['day'] +
+                    '-' + infos['cases']; +
+                '</li>\n';
+            }
 
-    .then((response) => response.json())
-
-
-
-    .then(function(info) {
-        var listBody = '';
-        for (var k = 0; k < info.length; k++) {
-            var infos = info[k];
-            listBody += '<li>' + infos['state'] +
-                ', ' + infos['day'] +
-                '-' + infos['cases']; +
-            '</li>\n';
-        }
-
-        var casesElement = document.getElementById('total_cases_graph_button');
-        if (casesElement) {
-            casesElement.innerHTML = listBody;
-        }
-    })
+            var casesElement = document.getElementById('total_cases_graph_button');
+            if (casesElement) {
+                casesElement.innerHTML = listBody;
+            }
+        })
 
 
 
@@ -40,5 +36,3 @@ function onCasesButton() {
         console.log(error);
     });
 }
-
-window.onload = initialize;
