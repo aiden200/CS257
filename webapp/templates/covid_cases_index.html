@@ -17,17 +17,12 @@
 <body>
     <div id="background_boxes">
         <div id="top_horizontal_square">
-            <h3>Covid Data in the United States</h3>
-            <form name="input" action="html_form_action.php" method="get">
-                State name: <input type="text" name="user" placeholder="Search for region">
-                <input type="submit" value="Submit">
-                <input type="text" id="myInputList" onkeyup="getResults()" placeholder="Search for region">
-            </form>
+            <h3>Covid Data in the United States</h3> 
+            <h4><a id= 'rightUpperText'><p>You can search for states and see graphs. They get displayed down below!</p></a></h4>
             
-            
-            <h3>You can go to <a href="/">home page</a>.</h3>
+            <h3>You can go to <a href="/">home page</a>.</h3> </br></br>
             <div id="myDropdown" class="dropdown-content">
-                <input type="text" placeholder="Search.." id="myInput" onkeyup="filterFunction()">
+                <input type="text" placeholder="Search for state name.." id="myInput" onkeyup="filterFunction()">
                 <div id ="list_container" class = "dropdown-content"></div>
             </div>
         </div>
