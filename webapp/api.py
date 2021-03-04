@@ -53,10 +53,10 @@ def get_total_cases():
         connection.close()
         return json.dumps(return_str)#WORKS
     else:
-        query = "SELECT DISTINCT states, cases\
-                FROM cases_date\
+        query = "SELECT DISTINCT states_code.states, cases_date.cases\
+                FROM cases_date, states_code\
                 WHERE day = (SELECT MAX(day) FROM cases_date)\
-                AND states LIKE %s;"
+                AND UPPER(states_code.states) LIKE UPPER(%s) AND states_code.code = cases_date.states;"
         cursor = getCursor(query, connection, user_input)
         return_list = []
 
