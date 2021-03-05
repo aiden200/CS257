@@ -186,7 +186,12 @@ def get_cases_by_date():
             FROM cases_date, states_code
             WHERE UPPER(states_code.states) LIKE UPPER('California')
             AND states_code.code = cases_date.states
-            AND cases_date.day = '2021-02-28'
+            AND cases_date.day = '2021-02-20'
+            ORDER BY cases_date.day;
+            SELECT DISTINCT cases_date.states, cases_date.day, cases_date.cases
+            FROM cases_date
+            WHERE UPPER(cases_date.states) LIKE UPPER('CA')
+            AND cases_date.day = '2021-02-25'
             ORDER BY cases_date.day;
         """
         query = "SELECT DISTINCT cases_date.states, cases_date.day, cases_date.cases\

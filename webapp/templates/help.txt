@@ -1,0 +1,97 @@
+REQUEST: /cases_by_date?[region_name={state},given_date={date}]
+
+        GET parameters:
+            region_contains(optional, default:USA)
+            given_date(optional, default:latest date)
+        
+        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
+        the dictionary will contain cases by day for the United States with the following fields. 
+            name -- (string) the region name                                                
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+            
+        If only the state optional argument is given, the dictionary will contain cases by day for the specified state. The dictionary will have the following fields.
+            name -- (string) the region name
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+
+        If both optional arguments are given, the dictionary will contain the case of the specified date with the following fields.
+            name -- (string) the region name
+            date -- (string) the requested date
+            case -- (int) the cases on the date
+   
+EXAMPLE(S):
+    /cases_by_date
+    [{"name": "USA", "cases_dates": ["2020-01-14:0", "2020-01-15:0", "2020-01-16:0", "2020-01-17:0", "2020-01-18:0", "2020-01-19:1", "2020-01-20:1", "2020-01-21:2", ... ,"2021-02-28:28350657"]}]
+
+    /cases_by_date?region_name=CA
+    [{"name": "CA", "cases_dates": ["2020-03-04:53", "2020-03-05:53", "2020-03-06:60", ... ,"2021-02-27:3470877", "2021-02-28:3475562"]}]
+    
+    /cases_by_date?region_name=CA&given_date=2021-02-01
+    [{"name": "CA", "date": "2021-02-01", "case": 3258706}]
+--------------------------------
+
+REQUEST: /get_total_vaccinations
+GET parameters
+    region (Optional, default: '') -- return the states that 
+        its name contains in region, case-insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents one
+state's total vaccinations, sorted in cases, by a descending order. Each dictionary in this
+list will have the following fields.
+
+   region_name -- (TEXT) the state name
+   total_vaccinations -- (INTEGER) the total cases in that state
+
+REQUEST: /total_vaccinations?region_contains={state_keyword}
+
+    GET parameters: 
+        region_contains(optional, default: USA)
+
+    RESPONSE: a JSON int of the total number of vaccination cases in America if no optional arguments are specified. 
+    If an optional argument is specified, this will return a JSON dictionary with each state containing the state_keyword 
+    parameter as a key(string), and the value as the vaccinations of latest date for that state.
+
+    if no parameter entered, the dictionary will returns a number that represents the total vaccination in the us.
+        total_vaccinations -- (INTEGER) the total cases in that state
+    
+    if the only parameter is entered, it will return the full response indecated above.
+        region_name -- (TEXT) the state name
+        total_vaccinations -- (INTEGER) the total cases in that state
+
+EXAMPLE(S):
+    /total_vaccinations
+    1183501
+    
+    /total_vaccinations?region_contains=CA
+    [{"region_name": "North Carolina", "vaccinations": 1385902}, {"region_name": "American Samoa", "vaccinations": 10978}, {"region_name": "South Carolina", "vaccinations": 649402}, {"region_name": "California", "vaccinations": 5503523}]
+
+    /total_vaccinations?region_contains=California
+    [{"region_name": "California", "vaccinations": 5503523}]
+
+
+------------------------------------------------------------------------------
+
+REQUEST: /total_cases?region_contains={state_keyword}
+
+        GET parameters:
+            region_contains(optional, default: USA)
+
+        RESPONSE: a JSON int of the total number of covid cases in America if no optional arguments are specified. 
+        If an optional argument is specified, this will return a JSON dictionary with each state containing the 
+        state_keyword parameter as a key(string), and the value as the cases of the latest date for that state.
+
+        if no parameter entered, the dictionary will returns a number that represents the total cases in the us.
+            total_vaccinations -- (INTEGER) the total cases in that state
+    
+        if the only parameter is entered, it will return the full response indecated above.
+            region_name -- (TEXT) the state name
+            total_vaccinations -- (INTEGER) the total cases in that state
+
+EXAMPLE(S):
+    /total_cases
+        28350657
+    
+    /total_cases?region_contains=CA
+    [{"region_name": "California", "cases": 3475562}, {"region_name": "North Carolina", "cases": 858548}, {"region_name": "South Carolina", "cases": 516823}]
+
+    /total_cases?region_contains=California
+    [{"region_name": "California", "cases": 3475562}]

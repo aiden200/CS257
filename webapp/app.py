@@ -17,10 +17,10 @@ app.register_blueprint(api.api, url_prefix='/api')
 @app.route('/')
 def home():
     return flask.render_template('home_index.html')
-@app.route('/help')
+@app.route('/api/help')
 def help():
     return_string = ''
-    lines = open("templates/readme.txt", "r")
+    lines = open("templates/help.txt", "r")
     for line in lines:
         line = line + '<br/>'
         return_string = return_string + line
