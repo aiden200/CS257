@@ -104,7 +104,49 @@ function hoverPopupTemplate(geography, data) {
 
 }
 
+window.onclick = function(event) {
+    if (event.target.className.indexOf('dropbtn') == -1) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          openDropdown.classList.remove('show');
+        }
+      }
+    }
+}
 
+
+function filterFunction() {
+    var input = document.getElementById("myInput");
+    var url = getAPIBaseURL() + '/total_cases?region_contains=' + input.value;
+    fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(info => {
+            var listBody = '';
+            if (info.length === 0) { listBody += "No results!" } else {
+                for (var k = 0; k < info.length; k++) {
+                    var infos = info[k];
+                    let s = infos['region_name'] + '"'
+                    listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + " cases: " + infos['cases'] + '</a>' + '</br>';
+                }
+            }
+        
+            
+            document.getElementById('list_container').innerHTML = listBody;
+            document.getElementById("list_container").classList.toggle("show");
+            document.getElementById("home").setAttribute("class", "highlight3");
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+function getAPIBaseURL() {
+    var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
+    return baseURL;
+}
 
 function onStateClick(geography) { //change this target page to another one.
     var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + geography.properties.name;

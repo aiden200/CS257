@@ -36,12 +36,92 @@
 }
 
 #state-summary {
+    position: absolute;
     float: right;
     width: 40%;
 }
 
 .hoverpopup {
+    position: absolute;
     background: #eeeeee;
     border: 1px black solid;
     padding: 5px;
 }
+
+
+
+
+#myInput {
+    
+    /* Add a search icon to input we don't have this image yet????*/
+    
+    /* Position the search icon */
+    background-repeat: no-repeat;
+    /* Do not repeat the icon image */
+    /* Icon up to here */
+    width: 100%;
+    /* Full-width of the search bar*/
+    
+    /* Increase font-size */
+    padding: 12px 20px 12px 40px;
+    /* Add some padding */
+    
+    /* Add a grey border */
+    margin-bottom: 12px;
+    /* Add some space below the input */
+    box-sizing: border-box;
+    background-image: url('searchicon.png');
+    background-position: 14px 12px;
+    background-repeat: no-repeat;
+    font-size: 16px;
+    padding: 14px 20px 12px 45px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+
+  
+
+
+/* The search field when it gets focus/clicked on */
+#myInput:focus {outline: 3px solid #ddd;}
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+    
+    position: absolute;
+    min-width: 230px;
+    background-size: cover;
+    z-index: 1;
+    display: inline-block;
+}
+
+/* Links inside the dropdown */
+.dropdown-content_a {
+    background-repeat: repeat;
+    color: black;
+    position: relative;
+    padding: 15px 11px;
+    text-decoration: none;
+    display: block;
+    background-size: cover;
+    left: 50%;
+    transform: translateX(-50%);
+    
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
+.show {display:block;}
+
+#home {
+    background-color: #AAA;
+    min-width: 230px;
+    border: 1px solid #ddd;
+    z-index: 1;
+    font-size: 10px;
+}
+

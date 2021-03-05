@@ -62,9 +62,13 @@ function populateStateSelector() {
                 // Set the new-selection handler
                 stateSelector.onchange = onStateSelectorChanged;
 
-                // Start us out looking at Minnesota.
-                stateSelector.value = 'MN';
-                createStateChart('Minnesota', 'MN');
+                // Start us out looking at selected.
+                Request = GetRequest();
+                var state = Request['state'];
+                
+                createStateChart(state, abbrState(state, 'abbr'));
+                changeCasesState(state);
+                changeVaccinationsState(state);
             }
 
         })
@@ -73,12 +77,67 @@ function populateStateSelector() {
         });
 }
 
+function changeCasesState(stateName) {
+    var url = getAPIBaseURL() + '/total_cases?region_contains=' + stateName;
+    fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(info => {
+            var listBody = '';
+            if (info.length === 0) { listBody += "No data" } else {
+                for (var k = 0; k < info.length; k++) {
+                    var infos = info[k];
+                    let s = infos['region_name'] + '"'
+                    listBody += '<h4>' + infos['region_name'] + " cases: " + infos['cases'] + '</h4>';
+                }
+            }
+        
+            
+            document.getElementById('cases').innerHTML = listBody;
+            
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+function changeVaccinationsState(stateName) {
+    var url = getAPIBaseURL() + '/total_vaccinations?region_contains=' + stateName;
+    fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(info => {
+            var listBody = '';
+            if (info.length === 0) { listBody += "No data" } else {
+                for (var k = 0; k < info.length; k++) {
+                    var infos = info[k];
+                    
+                    listBody += '<h4>' + infos['region_name'] + " vaccinations: " + infos['vaccinations'] + '</h4>' + '</br>';
+                }
+            }
+        
+            
+            document.getElementById('vaccinations').innerHTML = listBody;
+            
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+function getAPIBaseURL() {
+    var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
+    return baseURL;
+}
+
 function onStateSelectorChanged() {
     var stateSelector = document.getElementById('state-select');
     if (stateSelector) {
         var stateName = stateSelector.options[stateSelector.selectedIndex].text
         var stateAbbreviation = stateSelector.value;
         createStateChart(stateName, stateAbbreviation);
+        var element = document.getElementById('state');
+        element.innerHTML = '<h1> Imformation about ' + stateName+ ": " + '</h1>';
+        changeCasesState(stateName);
+        changeVaccinationsState(stateName);
     }
 }
 
@@ -234,3 +293,75 @@ For reference, this is what the "day" dictionaries returned by the COVID API loo
     "grade":""
 }
 */
+
+function abbrState(input, to){
+    
+    var states = [
+        ['Arizona', 'AZ'],
+        ['Alabama', 'AL'],
+        ['Alaska', 'AK'],
+        ['Arkansas', 'AR'],
+        ['California', 'CA'],
+        ['Colorado', 'CO'],
+        ['Connecticut', 'CT'],
+        ['Delaware', 'DE'],
+        ['Florida', 'FL'],
+        ['Georgia', 'GA'],
+        ['Hawaii', 'HI'],
+        ['Idaho', 'ID'],
+        ['Illinois', 'IL'],
+        ['Indiana', 'IN'],
+        ['Iowa', 'IA'],
+        ['Kansas', 'KS'],
+        ['Kentucky', 'KY'],
+        ['Louisiana', 'LA'],
+        ['Maine', 'ME'],
+        ['Maryland', 'MD'],
+        ['Massachusetts', 'MA'],
+        ['Michigan', 'MI'],
+        ['Minnesota', 'MN'],
+        ['Mississippi', 'MS'],
+        ['Missouri', 'MO'],
+        ['Montana', 'MT'],
+        ['Nebraska', 'NE'],
+        ['Nevada', 'NV'],
+        ['New Hampshire', 'NH'],
+        ['New Jersey', 'NJ'],
+        ['New Mexico', 'NM'],
+        ['New York', 'NY'],
+        ['North Carolina', 'NC'],
+        ['North Dakota', 'ND'],
+        ['Ohio', 'OH'],
+        ['Oklahoma', 'OK'],
+        ['Oregon', 'OR'],
+        ['Pennsylvania', 'PA'],
+        ['Rhode Island', 'RI'],
+        ['South Carolina', 'SC'],
+        ['South Dakota', 'SD'],
+        ['Tennessee', 'TN'],
+        ['Texas', 'TX'],
+        ['Utah', 'UT'],
+        ['Vermont', 'VT'],
+        ['Virginia', 'VA'],
+        ['Washington', 'WA'],
+        ['West Virginia', 'WV'],
+        ['Wisconsin', 'WI'],
+        ['Wyoming', 'WY'],
+    ];
+
+    if (to == 'abbr'){
+        input = input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        for(i = 0; i < states.length; i++){
+            if(states[i][0] == input){
+                return(states[i][1]);
+            }
+        }    
+    } else if (to == 'name'){
+        input = input.toUpperCase();
+        for(i = 0; i < states.length; i++){
+            if(states[i][1] == input){
+                return(states[i][0]);
+            }
+        }    
+    }
+}
