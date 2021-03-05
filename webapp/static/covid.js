@@ -29,46 +29,29 @@ function onCasesButton() {
                 casesElement.innerHTML = listBody;
             }
         })
-
-
-
-    .catch(function(error) {
-        console.log(error);
-    });
-
-
+        .catch(function(error) {
+            console.log(error);
+        });
 }
 
 function filterFunction() {
     var input = document.getElementById("myInput");
     var url = getAPIBaseURL() + '/total_cases?region_contains=' + input.value;
-    fetch(url, {method:'get'})
-        
+    fetch(url, { method: 'get' })
         .then((response) => response.json())
         .then(info => {
             var listBody = '';
-            if (info.length === 0) {listBody += "No results!"}
-            else{
+            if (info.length === 0) { listBody += "No results!" } else {
                 for (var k = 0; k < info.length; k++) {
                     var infos = info[k];
-                    listBody += '<a href="/" class="home">' + infos['region_name'] + " cases: " + infos['cases'] + '</a>' + '</br>';
+                    let s = infos['region_name'] + '"'
+                    listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + " cases: " + infos['cases'] + '</a>' + '</br>';
                 }
             }
-
             document.getElementById('list_container').innerHTML = listBody;
             document.getElementById("home").setAttribute("class", "highlight3");
-
-        
-            
         })
-
-        
-    .catch(function(error) {
-        console.log(error);
-    });
-    
-    
+        .catch(function(error) {
+            console.log(error);
+        });
 }
-
-
-

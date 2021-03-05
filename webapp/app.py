@@ -25,7 +25,9 @@ def help():
         line = line + '<br/>'
         return_string = return_string + line
     return return_string
-
+@app.route('/state_detail')
+def state_detail():
+    return flask.render_template('state_detail.html')
 @app.route('/<path:path>')
 def shared_header_catchall(path):
     return flask.render_template(path)

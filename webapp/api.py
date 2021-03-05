@@ -175,12 +175,26 @@ def get_cases_by_date():
             connection.close()
             return json.dumps(return_list) #works
     else: #case 3
-        query = "\
+        """
+        "\
             SELECT DISTINCT cases_date.day, cases_date.cases\
             FROM cases_date\
             WHERE cases_date.states = %s\
             AND cases_date.day = DATE(%s)\
             ORDER BY cases_date.day;"
+            SELECT DISTINCT cases_date.day, cases_date.states, cases_date.cases
+            FROM cases_date, states_code
+            WHERE UPPER(states_code.states) LIKE UPPER('California')
+            AND states_code.code = cases_date.states
+            AND cases_date.day = '2021-02-28'
+            ORDER BY cases_date.day;
+        """
+        query = "SELECT DISTINCT cases_date.states, cases_date.day, cases_date.cases\
+            FROM cases_date\
+            WHERE UPPER(cases_date.states) LIKE UPPER(%s)\
+            AND cases_date.day = %s\
+            ORDER BY cases_date.day;"
+
         cursor = getCursor(query, connection, region_name, given_date)
         for row in cursor:
             row_dic = {}
@@ -189,7 +203,7 @@ def get_cases_by_date():
             row_dic['case'] = row[2]
             return_list.append(row_dic)
         connection.close()
-        return json.dumps(return_list) # not working
+        return json.dumps(return_list) # working
     
 
 @api.route("/vaccinations_by_date")
@@ -224,22 +238,28 @@ def get_vaccinations_by_date():
         if region_name == 'USA':
             query = "SELECT DISTINCT vaccinations_in_US.day, vaccinations_in_US.people_with_1_or_more_doses\
                 FROM vaccinations_in_US\
-                ORDER BY cases_date.day;"
+                ORDER BY vaccinations_in_US.people_with_1_or_more_doses;"
             cursor = getCursor(query, connection)
-            return json.dumps(cursor[0])
+            in_list = []
+            for row in cursor:
+                row_dic = {}
+                row_dic['region'] = "USA"
+                row_dic['date'] = str(row[0])
+                row_dic['vaccinations'] = row[1]
+                return_list.append(row_dic)
+            connection.close()
+            return json.dumps(return_list)
         else: # WE DONT HAVE ANYTHING FROM HERE
             query = "SELECT DISTINCT cases_date.day, cases_date.cases\
                 FROM cases_date\
                 WHERE cases_date.states = '%s'\
                 ORDER BY cases_date.day;"
             cursor = getCursor(query, connection, region_name)
-            in_list = []
             for row in cursor:
-                in_list.append(str(row[0]) + ':' + row[1])
-            in_dic = {}
-            in_dic["name"] = region_name
-            in_dic["cases_dates"] = in_list
-            return_list.append(in_dic)
+                row_dic = {}
+                row_dic['date'] = row[0]
+                row_dic['case'] = row[1]
+                return_list.append(row_dic)
             connection.close()
             return json.dumps(return_list)
     else: #case 3

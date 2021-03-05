@@ -107,7 +107,7 @@ function hoverPopupTemplate(geography, data) {
 
 
 function onStateClick(geography) { //change this target page to another one.
-    var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/about.html';
+    var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + geography.properties.name;
     window.location.href = url;
     // geography.properties.name will be the state/country name (e.g. 'Minnesota')
     // geography.id will be the state/country name (e.g. 'MN')
