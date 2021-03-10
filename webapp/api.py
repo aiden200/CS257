@@ -70,6 +70,48 @@ def get_total_cases():
 
         return json.dumps(return_list)#WORKS
 
+@api.route("/total_cases_and_vaccination") # always USA?
+def get_total_cases_and_vaccination():
+    ''' 
+        REQUEST: /total_cases?region_contains={state_keyword}
+
+        GET parameters:x
+
+
+            region_contains(optional, default: USA)
+
+        RESPONSE: a JSON int of the total number of covid cases in America if no optional arguments are specified. 
+        If an optional argument is specified, this will return a JSON dictionary with each state containing the 
+        state_keyword parameter as a key(string), and the value as the cases for that state.
+        
+        make it case insensitive:
+        """
+        SELECT DISTINCT states_code.states, cases_date.cases
+        FROM cases_date, states_code
+        WHERE day = (SELECT MAX(day) FROM cases_date)
+        AND UPPER(states_code.states) LIKE UPPER(%s)
+        AND states_code.code = cases_date.states;
+        """
+    '''
+    connection = connect_to_database() 
+    query = "SELECT DISTINCT vaccinations_region.region, vaccinations_region.people_with_1_or_more_doses, cases_date.cases\
+            FROM cases_date, vaccinations_region,states_code\
+            WHERE UPPER(cases_date.states) = UPPER(states_code.code)\
+            AND UPPER(states_code.states) = UPPER(vaccinations_region.region)\
+            AND cases_date.day = (SELECT MAX(day) FROM cases_date)\
+            ORDER BY cases_date.cases;"
+    cursor = getCursor(query, connection)
+    return_list = []
+
+    for row in cursor:
+        row_dic = {}
+        row_dic['region_name'] = row[0]
+        row_dic['vaccination'] = row[1]
+        row_dic['cases'] = row[2]
+        return_list.append(row_dic)
+    connection.close()
+
+    return json.dumps(return_list)#WORKS
 @api.route("/total_vaccinations")
 def get_total_vaccinations():
     ''' 
@@ -288,6 +330,20 @@ def get_increased_cases_by_date():
             WHERE UPPER(cases_date.states) LIKE UPPER('CA')
             AND cases_date.day = '2021-02-25'
             ORDER BY cases_date.day;
+            CREATE TABLE vaccinations_region(
+                region text,
+                people_with_1_or_more_doses integer,
+                people_with_1_or_more_doses_per_100K integer,
+                people_with_2_doses integer,
+                people_with_2_doses_per_100K integer,
+            );
+            
+            SELECT DISTINCT vaccinations_region.region, vaccinations_region.people_with_1_or_more_doses, cases_date.cases
+            FROM cases_date, vaccinations_region,states_code
+            WHERE UPPER(cases_date.states) = UPPER(states_code.code)
+            AND UPPER(states_code.states) = UPPER(vaccinations_region.region)
+            AND cases_date.day = (SELECT MAX(day) FROM cases_date)
+            ORDER BY cases_date.cases;
         """
         query = "SELECT DISTINCT cases_date.states, cases_date.day, cases_date.cases_increased\
             FROM cases_date\
@@ -305,6 +361,7 @@ def get_increased_cases_by_date():
         connection.close()
         return json.dumps(return_list) # working
     
+
 
 @api.route("/vaccinations_by_date")
 def get_vaccinations_by_date():
