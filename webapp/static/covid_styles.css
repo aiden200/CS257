@@ -9,7 +9,13 @@
 body {
     margin: 19px;
     padding: 15px;
-    color: black
+    color: #afffff;
+    background-color: #264e86;
+}
+
+
+a:-webkit-any-link {
+   color: #5E88fc;
 }
 
 #background_boxes {
@@ -25,8 +31,8 @@ body {
     font-size: 15pt;
     border: 1px solid black;
     line-height: 2px;
-    color: blue;
-    background-color: beige;
+    
+    
 }
 
 

@@ -15,6 +15,15 @@
  * to attribute the source and license type (CC BY 4.0) when sharing our data
  * or website content.
  */
+/*
+ body {
+    color: #afffff;
+    background-color: #264e86;
+}
+*/
+a:-webkit-any-link {
+   color: #5E88fc;
+}
 
 select {
     font-size: 16pt;
@@ -50,7 +59,7 @@ select {
 
 .tooltip {
     display: none;
-    background-color: #eee;
+    
     border: 1px solid black;
     padding: 2px;
 }

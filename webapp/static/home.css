@@ -10,6 +10,18 @@
  * https://github.com/markmarkoh/datamaps
  */
 
+
+
+ body {
+     color: #afffff;
+     background-color: #264e86;
+ }
+ 
+ a:-webkit-any-link {
+    color: #5E88fc;
+}
+  
+
 #map-container {
     position: relative;
     float: left;
@@ -27,7 +39,7 @@
      * his color choices, he makes stuff orange to force their hand. I am using
      * orange here both to remind you to change the color, and to make visible the
      * size and aspect ratio of the US map object. */
-    background: beige;
+    
 }
 
 #goals {
@@ -80,13 +92,14 @@
 }
 
 
-  
 
 
 /* The search field when it gets focus/clicked on */
 #myInput:focus {outline: 3px solid #ddd;}
 
-
+.hoverpopup {
+    color: black;
+}
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
     
@@ -100,7 +113,7 @@
 /* Links inside the dropdown */
 .dropdown-content_a {
     background-repeat: repeat;
-    color: black;
+    color: #3fc1c9;
     position: relative;
     padding: 15px 11px;
     text-decoration: none;
