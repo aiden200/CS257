@@ -62,6 +62,7 @@ select {
 
 .tooltip {
     display: none;
+    background-color: #eee;
     border: 1px solid black;
     padding: 2px;
 }

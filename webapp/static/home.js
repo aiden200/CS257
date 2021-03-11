@@ -26,7 +26,7 @@ function getAPIBaseURL() {
 
 function initialize() {
     initializeMap();
-    createStateChart();
+    populateStateSelector();
 }
 
 function initializeMap() {
@@ -136,13 +136,36 @@ function onStateClick(geography) {
 
 }
 
-function createStateChart() {
-    // Set the title
-    var stateTitle = document.getElementById('state-new-cases-title');
-    if (stateTitle) {
-        stateTitle.innerHTML = "Vaccination and increased cases in the US";
-    }
+function populateStateSelector() {
+    // Populate the the drop-down list with the list of states from the API.
+    var stateSelector = document.getElementById('method-select');
+    if (stateSelector) {
+        // Populate it with states from the API
+        var stateSelectorBody = '<option value="increased_cases">increased cases</option>\n';
+        stateSelectorBody += '<option value="total_vaccination">total vaccination</option>\n';
+        stateSelector.innerHTML = stateSelectorBody;
 
+        // Set the new-selection handler
+        stateSelector.onchange = onStateSelectorChanged;
+
+        // Start us out looking at selected.
+        var methodname = stateSelector.value;
+        createStateChart(methodname);
+    }
+}
+
+function onStateSelectorChanged() {
+    var stateSelector = document.getElementById('method-select');
+    if (stateSelector) {
+        var name = stateSelector.options[stateSelector.selectedIndex].text
+        var methodname = stateSelector.value;
+        createStateChart(methodname);
+        var element = document.getElementById('state-new-cases-title');
+        element.innerHTML = '<h1> Imformation about ' + name + " in the US " + '</h1>';
+    }
+}
+
+function createStateChart(methodname) {
     // Create the chart
     var url = getAPIBaseURL() + "/increased_cases_and_total_vaccination_by_date";
 
@@ -177,7 +200,7 @@ function createStateChart() {
             var infos = info[k];
             var date = infos["day"];
             labels.push(date);
-            newCasesData.push({ meta: date, value: infos["increased_cases"] });
+            newCasesData.push({ meta: date, value: infos[methodname] });
         }
 
         // We set some options for our bar chart. seriesBarDistance is the width of the
