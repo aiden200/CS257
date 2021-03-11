@@ -507,8 +507,8 @@ def get_increased_vaccination_by_date():
         connection.close()
         return json.dumps(return_list) # working
 
-@api.route("/increased_cases_and_total_vaccination_by_date")
-def get_increased_cases_and_total_vaccination_by_date():
+@api.route("/us_information")
+def get_us_information():
     '''
         REQUEST: /increased_cases_by_date?[region_name={state},given_date={date}]
 
@@ -532,7 +532,8 @@ def get_increased_cases_and_total_vaccination_by_date():
     connection = connect_to_database()
     query = ''
     return_list = []
-    query = "SELECT DISTINCT cases_in_US.day, cases_in_US.cases_increased, vaccinations_in_US.people_with_1_or_more_doses\
+    query = "SELECT DISTINCT cases_in_US.day, cases_in_US.cases, cases_in_US.cases_increased, vaccinations_in_US.people_with_1_or_more_doses,\
+        vaccinations_in_US.total_doses_administered_daily, vaccinations_in_US.people_with_2_doses\
         FROM cases_in_US, vaccinations_in_US\
         WHERE cases_in_US.day = vaccinations_in_US.day\
         ORDER BY cases_in_US.day;"
@@ -541,8 +542,11 @@ def get_increased_cases_and_total_vaccination_by_date():
     for row in cursor:
         in_dic = {}
         in_dic["day"] = str(row[0])
-        in_dic["increased_cases"] = row[1]  
-        in_dic["total_vaccination"] = row[2]  
+        in_dic["total_cases"] = row[1]
+        in_dic["increased_cases"] = row[2]  
+        in_dic["people_with_1_or_more_doses"] = row[3]
+        in_dic["total_doses_administered_daily"] = row[4]
+        in_dic["people_with_2_doses"] = row[5]
         return_list.append(in_dic)
     connection.close()
     return json.dumps(return_list)#WORKS

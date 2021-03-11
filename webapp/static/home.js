@@ -142,7 +142,11 @@ function populateStateSelector() {
     if (stateSelector) {
         // Populate it with states from the API
         var stateSelectorBody = '<option value="increased_cases">increased cases</option>\n';
-        stateSelectorBody += '<option value="total_vaccination">total vaccination</option>\n';
+        stateSelectorBody += '<option value="total_cases">total vaccination</option>\n';
+        stateSelectorBody += '<option value="people_with_1_or_more_doses">people with 1 or more doses</option>\n';
+        stateSelectorBody += '<option value="total_doses_administered_daily">total doses administered daily</option>\n';
+        stateSelectorBody += '<option value="people_with_2_doses">people with 2 doses</option>\n';
+
         stateSelector.innerHTML = stateSelectorBody;
 
         // Set the new-selection handler
@@ -167,7 +171,7 @@ function onStateSelectorChanged() {
 
 function createStateChart(methodname) {
     // Create the chart
-    var url = getAPIBaseURL() + "/increased_cases_and_total_vaccination_by_date";
+    var url = getAPIBaseURL() + "/us_information";
 
     fetch(url, { method: 'get' })
 
