@@ -26,6 +26,7 @@ function getAPIBaseURL() {
 
 function initialize() {
     initializeMap();
+    createStateChart();
 }
 
 function initializeMap() {
@@ -76,7 +77,7 @@ function hoverPopupTemplate(geography, data) {
     return template;
 
 }
-//ask jeff
+
 function getStateInfo(statename) {
     var info = extraStateInfo[statename];
     var s = '<strong>Cases: </strong>' + info['cases'] + '<br>\n';
@@ -133,4 +134,113 @@ function onStateClick(geography) {
     var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + geography.properties.name;
     window.location.href = url;
 
+}
+
+function createStateChart() {
+    // Set the title
+    var stateTitle = document.getElementById('state-new-cases-title');
+    if (stateTitle) {
+        stateTitle.innerHTML = "Vaccination and increased cases in the US";
+    }
+
+    // Create the chart
+    var url = getAPIBaseURL() + "/increased_cases_and_total_vaccination_by_date";
+
+    fetch(url, { method: 'get' })
+
+    .then((response) => response.json())
+
+    .then(function(info) {
+        // Use the API response (days), which is a list of dictionaries like this:
+        //
+        //   {date: '20200315', positiveIncrease: 2345, ... }
+        //
+        // to assemble the data my bar-chart will need. That data looks like a
+        // list of dictionaries (newCasesData). Each dictionary in the list will look
+        // like this:
+        //
+        //   {meta:'2020-03-15', value: 2345}
+        //
+        // Here, meta is the date, which Chartist will use in a popup window that appears
+        // if you hover over a bar in the bar chart, and value is the number of new COVID
+        // cases for that date, which will, of course, determine the height of the bar
+        // in the bar chart.
+        //
+        // In this same loop, we're also creating a list (labels) of labels to be used
+        // along the x-axis of the bar chart.
+        // This code assumes results are sorted in descending order by date, which is
+        // indeed how the API returns the data as of this writing.
+        var labels = [];
+        var newCasesData = [];
+        for (var k = 0; k < info.length; k++) {
+            // Assumes YYYYMMDD int
+            var infos = info[k];
+            var date = infos["day"];
+            labels.push(date);
+            newCasesData.push({ meta: date, value: infos["increased_cases"] });
+        }
+
+        // We set some options for our bar chart. seriesBarDistance is the width of the
+        // bars. axisX allows us to specify a bunch of options related to the x-axis.
+        // The one we're picking is labelInterpolationFnc, which allows us to control
+        // which bars have x-axis labels. Here, we're saying "write the date of the bar
+        // on the x-axis every 7 days". Otherwise, the axis just gets too crowded.
+        var options = {
+            seriesBarDistance: 25,
+            axisX: {
+                labelInterpolationFnc: function(value, index) {
+                    return index % 7 === 0 ? value : null;
+                }
+            },
+        };
+
+        // Here's the form in which Chartist expects its data to be specified. Not that
+        // series is a list, since you might want to have two or more differently colored
+        // sets of bars, or line graphs, etc. on the same chart.
+        var data = {
+            labels: labels,
+            series: [newCasesData]
+        };
+
+        // Finally, we create the bar chart, and attach it to the desired <div> in our HTML.
+        var chart = new Chartist.Line('#state-new-cases-chart', data, options);
+
+        // HERE COMES THE MESS THAT IS TOOLTIPS! FEEL FREE TO IGNORE!
+        // Tooltips are those little sometimes-informative popups that give you a little
+        // information about something your mouse is hovering over. We want them on this
+        // bar chart so we can get the exact number of new cases on a particular day, not
+        // just an estimate (which is what you'll get from just looking at the bar's height).
+        //
+        // I got a lot of help from here.
+        // https://stackoverflow.com/questions/34562140/how-to-show-label-when-mouse-over-bar
+        //
+        // Note that all of this code uses jQuery notation. I wrote everything above here
+        // in vanilla Javascript, but I don't feel like rewriting the following more complicated code.
+
+        chart.on('created', function(line) {
+            var toolTipSelector = '#state-new-cases-tooltip';
+            $('.chart-container .ct-line').on('mouseenter', function(e) { // Set a "hover handler" for every bar in the chart
+                var value = $(this).attr('ct:value'); // value and meta come ultimately from the newCasesData above
+                var label = $(this).attr('ct:meta');
+                var caption = '<b>Date:</b> ' + label + '<br><b>New cases:</b> ' + value;
+                $(toolTipSelector).html(caption);
+                $(toolTipSelector).parent().css({ position: 'relative' });
+                // bring to front, https://stackoverflow.com/questions/3233219/is-there-a-way-in-jquery-to-bring-a-div-to-front
+                $(toolTipSelector).parent().append($(toolTipSelector));
+
+                var x = e.clientX;
+                var y = e.clientY;
+                $(toolTipSelector).css({ top: y, left: x, position: 'fixed', display: 'block' });
+            });
+
+            $('.state-new-cases-chart .ct-line').on('mouseout', function() {
+                $(toolTipSelector).css({ display: 'none' });
+            });
+        });
+    })
+
+    // Log the error if anything went wrong during the fetch.
+    .catch(function(error) {
+        console.log(error);
+    });
 }

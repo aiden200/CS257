@@ -70,7 +70,7 @@ def get_total_cases():
 
         return json.dumps(return_list)#WORKS
 
-@api.route("/total_cases_and_vaccination") # always USA?
+@api.route("/total_cases_and_vaccination") 
 def get_total_cases_and_vaccination():
     ''' 
         REQUEST: /total_cases?region_contains={state_keyword}
@@ -289,11 +289,10 @@ def get_increased_cases_by_date():
             cursor = getCursor(query, connection)
             in_list = []
             for row in cursor:
-                in_list.append(str(row[0]) + ':' + str(row[1]))
-            in_dic = {}
-            in_dic["name"] = region_name
-            in_dic["increased_cases_dates"] = in_list
-            return_list.append(in_dic)
+                in_dic = {}
+                in_dic["day"] = str(row[0])
+                in_dic["increased_cases"] = row[1]              
+                return_list.append(in_dic)
             connection.close()
             return json.dumps(return_list)#WORKS
         else:
@@ -302,15 +301,14 @@ def get_increased_cases_by_date():
                 WHERE cases_date.states = %s\
                 ORDER BY cases_date.day;"
             cursor = getCursor(query, connection, region_name)
-            in_list = []
+            
             for row in cursor:
-                in_list.append(str(row[0]) + ':' + str(row[1]))
-            in_dic = {}
-            in_dic["name"] = region_name
-            in_dic["increased_cases_dates"] = in_list
-            return_list.append(in_dic)
+                in_dic = {}
+                in_dic["day"] = str(row[0])
+                in_dic["increased_cases"] = row[1]              
+                return_list.append(in_dic)
             connection.close()
-            return json.dumps(return_list) #works
+            return json.dumps(return_list)#WORKS
     else: #case 3
         """
         "\
@@ -508,6 +506,46 @@ def get_increased_vaccination_by_date():
             return_list.append(row_dic)
         connection.close()
         return json.dumps(return_list) # working
+
+@api.route("/increased_cases_and_total_vaccination_by_date")
+def get_increased_cases_and_total_vaccination_by_date():
+    '''
+        REQUEST: /increased_cases_by_date?[region_name={state},given_date={date}]
+
+        GET parameters:
+            region_contains(optional, default:USA)
+
+        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
+        the dictionary will contain cases by day for the United States with the following fields. 
+            name -- (string) the region name                                                
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+            
+        If only the state optional argument is given, the dictionary will contain cases by day for the specified state. The dictionary will have the following fields.
+            name -- (string) the region name
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+
+        If both optional arguments are given, the dictionary will contain the case of the specified date with the following fields.
+            name -- (string) the region name
+            date -- (string) the requested date
+            case -- (int) the cases on the date
+    '''
+    connection = connect_to_database()
+    query = ''
+    return_list = []
+    query = "SELECT DISTINCT cases_in_US.day, cases_in_US.cases_increased, vaccinations_in_US.people_with_1_or_more_doses\
+        FROM cases_in_US, vaccinations_in_US\
+        WHERE cases_in_US.day = vaccinations_in_US.day\
+        ORDER BY cases_in_US.day;"
+    cursor = getCursor(query, connection)
+    in_list = []
+    for row in cursor:
+        in_dic = {}
+        in_dic["day"] = str(row[0])
+        in_dic["increased_cases"] = row[1]  
+        in_dic["total_vaccination"] = row[2]  
+        return_list.append(in_dic)
+    connection.close()
+    return json.dumps(return_list)#WORKS
     
 def connect_to_database():
     '''

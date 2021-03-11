@@ -18,12 +18,14 @@
 
 window.onload = initialize;
 
+var state_n = ""
+
 function initialize() {
     var element = document.getElementById('state');
     let Request = new Object();
     Request = GetRequest();
-    var state = Request['state'];
-    element.innerHTML = '<h1> Imformation about ' + state + ": " + '</h1>';
+    state_n = Request['state'];
+    element.innerHTML = '<h1> Imformation about ' + state_n + ": " + '</h1>';
     populateStateSelector();
 }
 
@@ -63,12 +65,10 @@ function populateStateSelector() {
                 stateSelector.onchange = onStateSelectorChanged;
 
                 // Start us out looking at selected.
-                Request = GetRequest();
-                var state = Request['state'];
-                
-                createStateChart(state, abbrState(state, 'abbr'));
-                changeCasesState(state);
-                changeVaccinationsState(state);
+
+                createStateChart(state_n, abbrState(state_n, 'abbr'));
+                changeCasesState(state_n);
+                changeVaccinationsState(state_n);
             }
 
         })
@@ -90,10 +90,10 @@ function changeCasesState(stateName) {
                     listBody += '<h4>' + infos['region_name'] + " cases: " + infos['cases'] + '</h4>';
                 }
             }
-        
-            
+
+
             document.getElementById('cases').innerHTML = listBody;
-            
+
         })
         .catch(function(error) {
             console.log(error);
@@ -109,14 +109,14 @@ function changeVaccinationsState(stateName) {
             if (info.length === 0) { listBody += "No data" } else {
                 for (var k = 0; k < info.length; k++) {
                     var infos = info[k];
-                    
+
                     listBody += '<h4>' + infos['region_name'] + " vaccinations: " + infos['vaccinations'] + '</h4>' + '</br>';
                 }
             }
-        
-            
+
+
             document.getElementById('vaccinations').innerHTML = listBody;
-            
+
         })
         .catch(function(error) {
             console.log(error);
@@ -135,7 +135,7 @@ function onStateSelectorChanged() {
         var stateAbbreviation = stateSelector.value;
         createStateChart(stateName, stateAbbreviation);
         var element = document.getElementById('state');
-        element.innerHTML = '<h1> Imformation about ' + stateName+ ": " + '</h1>';
+        element.innerHTML = '<h1> Imformation about ' + stateName + ": " + '</h1>';
         changeCasesState(stateName);
         changeVaccinationsState(stateName);
     }
@@ -149,18 +149,13 @@ function createStateChart(stateName, stateAbbreviation) {
     }
 
     // Create the chart
-    var url = '';
-    if (stateAbbreviation.toLowerCase() == 'us') {
-        url = 'https://api.covidtracking.com/v1/us/daily.json';
-    } else {
-        url = 'https://api.covidtracking.com/v1/states/' + stateAbbreviation.toLowerCase() + '/daily.json';
-    }
+    var url = getAPIBaseURL() + "/increased_cases_by_date?region_name=" + stateAbbreviation;
 
     fetch(url, { method: 'get' })
 
     .then((response) => response.json())
 
-    .then(function(days) {
+    .then(function(info) {
         // Use the API response (days), which is a list of dictionaries like this:
         //
         //   {date: '20200315', positiveIncrease: 2345, ... }
@@ -182,12 +177,12 @@ function createStateChart(stateName, stateAbbreviation) {
         // indeed how the API returns the data as of this writing.
         var labels = [];
         var newCasesData = [];
-        for (var k = 0; k < days.length; k++) {
+        for (var k = 0; k < info.length; k++) {
             // Assumes YYYYMMDD int
-            var date = '' + days[days.length - k - 1].date;
-            date = date.slice(0, 4) + '-' + date.slice(4, 6) + '-' + date.slice(-2);
+            var infos = info[k];
+            var date = infos["day"];
             labels.push(date);
-            newCasesData.push({ meta: date, value: days[days.length - k - 1].positiveIncrease });
+            newCasesData.push({ meta: date, value: infos["increased_cases"] });
         }
 
         // We set some options for our bar chart. seriesBarDistance is the width of the
@@ -294,8 +289,8 @@ For reference, this is what the "day" dictionaries returned by the COVID API loo
 }
 */
 
-function abbrState(input, to){
-    
+function abbrState(input, to) {
+
     var states = [
         ['Arizona', 'AZ'],
         ['Alabama', 'AL'],
@@ -349,19 +344,19 @@ function abbrState(input, to){
         ['Wyoming', 'WY'],
     ];
 
-    if (to == 'abbr'){
-        input = input.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        for(i = 0; i < states.length; i++){
-            if(states[i][0] == input){
-                return(states[i][1]);
+    if (to == 'abbr') {
+        input = input.replace(/\w\S*/g, function(txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
+        for (i = 0; i < states.length; i++) {
+            if (states[i][0] == input) {
+                return (states[i][1]);
             }
-        }    
-    } else if (to == 'name'){
+        }
+    } else if (to == 'name') {
         input = input.toUpperCase();
-        for(i = 0; i < states.length; i++){
-            if(states[i][1] == input){
-                return(states[i][0]);
+        for (i = 0; i < states.length; i++) {
+            if (states[i][1] == input) {
+                return (states[i][0]);
             }
-        }    
+        }
     }
 }

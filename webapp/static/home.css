@@ -10,21 +10,18 @@
  * https://github.com/markmarkoh/datamaps
  */
 
+body {
+    color: #afffff;
+    background-color: #264e86;
+}
 
-
- body {
-     color: #afffff;
-     background-color: #264e86;
- }
- 
- a:-webkit-any-link {
+a:-webkit-any-link {
     color: #5E88fc;
 }
-  
 
 #map-container {
     position: relative;
-    float: left;
+    /*float: left;
     /* Preserving the container div's aspect ratio (which should be 4:3 for
      * the Datamap US map) uses this slightly bizarre CSS trick, where you make
      * sure the height is 0 and the ratio between width and padding-bottom
@@ -39,7 +36,6 @@
      * his color choices, he makes stuff orange to force their hand. I am using
      * orange here both to remind you to change the color, and to make visible the
      * size and aspect ratio of the US map object. */
-    
 }
 
 #goals {
@@ -60,24 +56,17 @@
     padding: 5px;
 }
 
-
-
-
 #myInput {
-    
     /* Add a search icon to input we don't have this image yet????*/
-    
     /* Position the search icon */
     background-repeat: no-repeat;
     /* Do not repeat the icon image */
     /* Icon up to here */
     width: 100%;
     /* Full-width of the search bar*/
-    
     /* Increase font-size */
     padding: 12px 20px 12px 40px;
     /* Add some padding */
-    
     /* Add a grey border */
     margin-bottom: 12px;
     /* Add some space below the input */
@@ -87,22 +76,24 @@
     background-repeat: no-repeat;
     font-size: 16px;
     padding: 14px 20px 12px 45px;
-
     border-bottom: 1px solid #ddd;
 }
 
 
-
-
 /* The search field when it gets focus/clicked on */
-#myInput:focus {outline: 3px solid #ddd;}
+
+#myInput:focus {
+    outline: 3px solid #ddd;
+}
 
 .hoverpopup {
     color: black;
 }
+
+
 /* Dropdown Content (Hidden by Default) */
+
 .dropdown-content {
-    
     position: absolute;
     min-width: 230px;
     background-size: cover;
@@ -110,7 +101,9 @@
     display: inline-block;
 }
 
+
 /* Links inside the dropdown */
+
 .dropdown-content_a {
     background-repeat: repeat;
     color: #3fc1c9;
@@ -121,14 +114,21 @@
     background-size: cover;
     left: 50%;
     transform: translateX(-50%);
-    
 }
 
+
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1
+}
+
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
-.show {display:block;}
+
+.show {
+    display: block;
+}
 
 #home {
     background-color: #AAA;
@@ -137,4 +137,3 @@
     z-index: 1;
     font-size: 10px;
 }
-

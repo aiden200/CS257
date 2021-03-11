@@ -15,14 +15,17 @@
  * to attribute the source and license type (CC BY 4.0) when sharing our data
  * or website content.
  */
+
+
 /*
  body {
     color: #afffff;
     background-color: #264e86;
 }
 */
+
 a:-webkit-any-link {
-   color: #5E88fc;
+    color: #5E88fc;
 }
 
 select {
@@ -42,8 +45,8 @@ select {
 }
 
 .chart-container .ct-bar {
-    stroke: #11aa11;
-    fill: #11aa11;
+    stroke: CornflowerBlue;
+    fill: CornflowerBlue;
     stroke-width: 5px;
 }
 
@@ -59,7 +62,6 @@ select {
 
 .tooltip {
     display: none;
-    
     border: 1px solid black;
     padding: 2px;
 }
