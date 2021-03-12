@@ -78,7 +78,8 @@ def in_US(index):
     else:
         return False
 def in_case_date(index):
-    if index <= 1 or index == 19 or index == 21:
+    list = [0,1,2,4,6,8,9,19,21]
+    if index in list:
         return True
     else:
         return False
@@ -92,8 +93,8 @@ def in_case_vaccine(index):
         return False
 
 def main():
-    reader = openfile("trends_in_number_of_covid19_vaccinations_in_the_us.csv")
-    writefile_vaccination_US(reader,"vaccination_history_US.csv")
+    reader = openfile("all-states-history.csv")
+    writefile_cases(reader,"new_state_date.csv")
     #\copy  states_code from 'state_code.csv' DELIMITER ',' CSV NULL AS 'Null'
     # cases_in_us
     #pg_dump --no-owner --no-privileges -U postgres covid > covid.sql

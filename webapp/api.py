@@ -550,7 +550,110 @@ def get_us_information():
         return_list.append(in_dic)
     connection.close()
     return json.dumps(return_list)#WORKS
-    
+
+@api.route("/state_information")
+def get_state_information():
+    '''
+        REQUEST: /state_information?[region_name={state}&historical_data={YesOrNo}&tableInfo={YesOrNo}]
+
+        GET parameters:
+            region_contains(optional, default:USA)
+
+        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
+        the dictionary will contain cases by day for the United States with the following fields. 
+            name -- (string) the region name                                                
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+            
+        If only the state optional argument is given, the dictionary will contain cases by day for the specified state. The dictionary will have the following fields.
+            name -- (string) the region name
+            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+
+        If both optional arguments are given, the dictionary will contain the case of the specified date with the following fields.
+            name -- (string) the region name
+            date -- (string) the requested date
+            case -- (int) the cases on the date
+    '''
+    region_name = flask.request.args.get('region_name')
+    historical_data = flask.request.args.get('historical_data','no')
+    tableInfo = flask.request.args.get('tableInfo','yes')
+    connection = connect_to_database()
+    query = ''
+    return_list = []
+    '''
+    cases_date:
+    death integer,
+	deathIncrease integer,
+	hospitalized integer,
+	hospitalizedCurrently integer,
+	hospitalizedIncrease integer,
+	cases integer,
+	cases_increased integer
+    vaccinations_region:
+    region text,
+    people_with_1_or_more_doses integer,
+	people_with_1_or_more_doses_per_100K integer,
+	people_with_2_doses integer,
+	people_with_2_doses_per_100K integer,
+    SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, 
+            cases_date.cases, cases_date.cases_increased, vaccinations_region.people_with_1_or_more_doses, vaccinations_region.people_with_1_or_more_doses_per_100K,
+            vaccinations_region.people_with_2_doses, vaccinations_region.people_with_2_doses_per_100K
+            FROM cases_date, vaccinations_region,states_code
+            WHERE cases_date.day = (SELECT MAX(day) FROM cases_date)
+            AND vaccinations_region.region = 'California'
+            AND vaccinations_region.region = states_code.states
+            AND cases_date.states = states_code.code;
+    '''
+    if tableInfo == 'yes' and historical_data == "no": #get the table data
+        query = "SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, \
+            cases_date.cases, cases_date.cases_increased, vaccinations_region.people_with_1_or_more_doses, vaccinations_region.people_with_1_or_more_doses_per_100K,\
+            vaccinations_region.people_with_2_doses, vaccinations_region.people_with_2_doses_per_100K\
+            FROM cases_date, vaccinations_region,states_code\
+            WHERE cases_date.day = (SELECT MAX(day) FROM cases_date)\
+            AND vaccinations_region.region = %s\
+            AND vaccinations_region.region = states_code.states\
+            AND cases_date.states = states_code.code;"
+        cursor = getCursor(query, connection,region_name)
+        for row in cursor:
+            in_dic = {}
+            in_dic["state"] = row[0]
+            in_dic["day"] = str(row[1])
+            in_dic["death"] = row[2]  
+            in_dic["deathIncrease"] = row[3]
+            in_dic["hospitalized"] = row[4]
+            in_dic["hospitalizedCurrently"] = row[5]
+            in_dic["hospitalizedIncrease"] = row[6]
+            in_dic["cases"] = row[7]
+            in_dic["cases_increased"] = row[8]
+            in_dic["people_with_1_or_more_doses"] = row[9]
+            in_dic["people_with_1_or_more_doses_per_100K"] = row[10]
+            in_dic["people_with_2_doses"] = row[11]
+            in_dic["people_with_2_doses_per_100K"] = row[12]
+            return_list.append(in_dic)
+        connection.close()
+        return json.dumps(return_list)#WORKS
+    if historical_data == "yes":
+        query = "SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, \
+            cases_date.cases, cases_date.cases_increased\
+            FROM cases_date, states_code\
+            WHERE states_code.states = %s\
+            AND  cases_date.states = states_code.code\
+            AND cases_date.states = states_code.code\
+            ORDER BY  cases_date.day;"
+        cursor = getCursor(query, connection,region_name)
+        for row in cursor:
+            in_dic = {}
+            in_dic["state"] = row[0]
+            in_dic["day"] = str(row[1])
+            in_dic["death"] = row[2]  
+            in_dic["deathIncrease"] = row[3]
+            in_dic["hospitalized"] = row[4]
+            in_dic["hospitalizedCurrently"] = row[5]
+            in_dic["hospitalizedIncrease"] = row[6]
+            in_dic["cases"] = row[7]
+            in_dic["cases_increased"] = row[8]
+            return_list.append(in_dic)
+        connection.close()
+        return json.dumps(return_list)#WORKS
 def connect_to_database():
     '''
     Will establish a connection to the database.
