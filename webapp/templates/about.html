@@ -10,22 +10,63 @@
 <head>
     <title>About</title>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='navbar.css') }}">
+    <script src="{{ url_for('static', filename='home.js') }}"></script>
     <!--<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}" />
     <script type="text/javascript" src="{{ url_for('static', filename='covid.js') }}"></script>
     -->
 </head>
 
 <body>
-    <div id="background_boxes">
-        <div id="top_horizontal_square">
-            <h3>Aiden and Silas's website</h3>
-            <h4> This is a picture of Aiden, wow he is so handsome!!!! </h4>
-            <img src="{{ url_for('static', filename='aiden.jpeg') }}" alt="aiden's photo">
-            <h4> This is a picture of Silas, wow he looks good!!!! </h4>
-            <img src="{{ url_for('static', filename='silas.jpg') }}" alt="silas's photo">
-            <p>You can go to <a href="/">home page</a>.</p>
-        </div>
-    </div>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <div class="container-fluid">
+              
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+          
+              <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+                <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="about.html">About Us</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="http://localhost:5000/state_detail?state=California">State covid data</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" href="source.html">About the Data</a>
+                  </li>
+                  
+                  
+                </ul>
+                <form class="d-flex">
+                  
+                  
+                    <div id="myDropdown" class="dropdown-content" type="search" placeholder="Search">
+                        <input type="text" placeholder="Search for state name.." id="myInput" onkeyup="filterFunction()">
+                        <div id="list_container" class="dropdown-content_a"></div>
+                    </div>
+                </form>
+              </div>
+            </div>
+        </nav>
+        <main class="container">
+    
+            <div class="starter-template text-center py-5 px-3">
+              <h1>Aiden and Silas's website</h1>
+              <p class="lead"> <h4> This is a picture of Aiden</h4>
+                <img src="{{ url_for('static', filename='aiden.jpeg') }}" alt="aiden's photo">
+                <h4> This is a picture of Silas</h4>
+                <img src="{{ url_for('static', filename='silas.jpg') }}" alt="silas's photo"></p>
+            </div>
+          
+        </main><!-- /.container -->
+
 
 
 </body>

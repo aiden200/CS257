@@ -24,6 +24,11 @@
 }
 */
 
+body {
+    color: #afffff;
+    background-color: #264e86;
+}
+
 a:-webkit-any-link {
     color: #5E88fc;
 }
@@ -82,4 +87,26 @@ svg.ct-chart-line {
     transform-origin: 100% 0;
     transform: translate(-100%) rotate(-75deg);
     white-space: nowrap;
+}
+
+.dropdown-content {
+    position: relative;
+    min-width: 230px;
+    background-size: cover;
+    z-index: 1;
+    display: inline-block;
+}
+
+
+/* Links inside the dropdown */
+
+.dropdown-content_a {
+    background-repeat: repeat;
+    color: #3fc1c9;
+    position: absolute;
+    padding: 15px 11px;
+    text-decoration: none;
+    display: block;
+    background-size: cover;
+    
 }
