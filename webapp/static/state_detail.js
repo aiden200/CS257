@@ -43,38 +43,27 @@ function GetRequest() {
 }
 
 function populateStateSelector() {
-    // Populate the the drop-down list with the list of states from the API.
-    var url = 'https://api.covidtracking.com/v1/states/info.json';
+    var stateSelector = document.getElementById('method-select');
+    if (stateSelector) {
+        // Populate it with states from the API
+        var stateSelectorBody = '<option value="cases_increased">Number of increased cases</option>\n';
+        stateSelectorBody += '<option value="cases">Number of total cases</option>\n';
+        stateSelectorBody += '<option value="death">Number of death</option>\n';
+        stateSelectorBody += '<option value="deathIncrease">Number of increased death</option>\n';
+        stateSelectorBody += '<option value="hospitalized">Number of hospitalized people</option>\n';
+        stateSelectorBody += '<option value="hospitalizedCurrently"> Number of currently hospitalized people</option>\n';
+        stateSelectorBody += '<option value="hospitalizedIncrease">Number of increased hospitalized people</option>\n';
+        stateSelector.innerHTML = stateSelectorBody;
+        console.log(stateSelectorBody);
+        // Set the new-selection handler
+        stateSelector.onchange = onStateSelectorChanged;
 
-    fetch(url, { method: 'get' })
-
-    .then((response) => response.json())
-
-    .then(function(states) {
-            var stateSelector = document.getElementById('state-select');
-            if (stateSelector) {
-                // Populate it with states from the API
-                var stateSelectorBody = '<option value="US">United States</option>\n';
-                for (var k = 0; k < states.length; k++) {
-                    var state = states[k];
-                    stateSelectorBody += '<option value="' + state['state'] + '">' + state['name'] + '</option>\n';
-                }
-                stateSelector.innerHTML = stateSelectorBody;
-
-                // Set the new-selection handler
-                stateSelector.onchange = onStateSelectorChanged;
-
-                // Start us out looking at selected.
-
-                createStateChart(state_n, abbrState(state_n, 'abbr'));
-                changeCasesState(state_n);
-                changeVaccinationsState(state_n);
-            }
-
-        })
-        .catch(function(error) {
-            console.log(error);
-        });
+        // Start us out looking at selected.
+        var methodname = stateSelector.value;
+        createStateChart(methodname);
+        changeCasesState(state_n);
+        changeVaccinationsState(state_n);
+    }
 }
 
 function changeCasesState(stateName) {
@@ -129,27 +118,27 @@ function getAPIBaseURL() {
 }
 
 function onStateSelectorChanged() {
-    var stateSelector = document.getElementById('state-select');
+    var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
-        var stateName = stateSelector.options[stateSelector.selectedIndex].text
-        var stateAbbreviation = stateSelector.value;
-        createStateChart(stateName, stateAbbreviation);
+        var methodname = stateSelector.value;
+        createStateChart(methodname);
         var element = document.getElementById('state');
-        element.innerHTML = '<h1> Imformation about ' + stateName + ": " + '</h1>';
+        element.innerHTML = '<h1>' + methodname + "in" + stateName + ": " + '</h1>';
         changeCasesState(stateName);
         changeVaccinationsState(stateName);
     }
 }
 
-function createStateChart(stateName, stateAbbreviation) {
+function createStateChart(methodname) {
     // Set the title
     var stateTitle = document.getElementById('state-new-cases-title');
     if (stateTitle) {
-        stateTitle.innerHTML = 'New cases for ' + stateName;
+        stateTitle.innerHTML = '<h1>' + methodname + "in" + state_n + ": " + '</h1>';
     }
 
     // Create the chart
-    var url = getAPIBaseURL() + "/increased_cases_by_date?region_name=" + stateAbbreviation;
+
+    var url = getAPIBaseURL() + "/state_information?region_name=" + state_n + "&historical_data=yes";
 
     fetch(url, { method: 'get' })
 
@@ -182,7 +171,7 @@ function createStateChart(stateName, stateAbbreviation) {
             var infos = info[k];
             var date = infos["day"];
             labels.push(date);
-            newCasesData.push({ meta: date, value: infos["increased_cases"] });
+            newCasesData.push({ meta: date, value: infos[methodname] });
         }
 
         // We set some options for our bar chart. seriesBarDistance is the width of the
