@@ -131,9 +131,13 @@ function onStateSelectorChanged() {
 
 function createStateChart(methodname) {
     // Set the title
+    var stateSelector = document.getElementById('method-select');
     var stateTitle = document.getElementById('state-new-cases-title');
     if (stateTitle) {
-        stateTitle.innerHTML = '<h1>' + methodname + "in" + state_n + ": " + '</h1>';
+        if (stateSelector) {
+            var Name = stateSelector.options[stateSelector.selectedIndex].text
+            stateTitle.innerHTML = '<h1>' + Name + " in " + state_n + '</h1>';
+        }
     }
 
     // Create the chart
