@@ -21,8 +21,6 @@ def get_total_cases():
         REQUEST: /total_cases?region_contains={state_keyword}
 
         GET parameters:x
-
-
             region_contains(optional, default: USA)
 
         RESPONSE: a JSON int of the total number of covid cases in America if no optional arguments are specified. 
@@ -73,12 +71,7 @@ def get_total_cases():
 @api.route("/total_cases_and_vaccination") 
 def get_total_cases_and_vaccination():
     ''' 
-        REQUEST: /total_cases?region_contains={state_keyword}
-
-        GET parameters:x
-
-
-            region_contains(optional, default: USA)
+        REQUEST: /total_cases_and_vaccination
 
         RESPONSE: a JSON int of the total number of covid cases in America if no optional arguments are specified. 
         If an optional argument is specified, this will return a JSON dictionary with each state containing the 
@@ -579,30 +572,6 @@ def get_state_information():
     connection = connect_to_database()
     query = ''
     return_list = []
-    '''
-    cases_date:
-    death integer,
-	deathIncrease integer,
-	hospitalized integer,
-	hospitalizedCurrently integer,
-	hospitalizedIncrease integer,
-	cases integer,
-	cases_increased integer
-    vaccinations_region:
-    region text,
-    people_with_1_or_more_doses integer,
-	people_with_1_or_more_doses_per_100K integer,
-	people_with_2_doses integer,
-	people_with_2_doses_per_100K integer,
-    SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, 
-            cases_date.cases, cases_date.cases_increased, vaccinations_region.people_with_1_or_more_doses, vaccinations_region.people_with_1_or_more_doses_per_100K,
-            vaccinations_region.people_with_2_doses, vaccinations_region.people_with_2_doses_per_100K
-            FROM cases_date, vaccinations_region,states_code
-            WHERE cases_date.day = (SELECT MAX(day) FROM cases_date)
-            AND vaccinations_region.region = 'California'
-            AND vaccinations_region.region = states_code.states
-            AND cases_date.states = states_code.code;
-    '''
     if tableInfo == 'yes' and historical_data == "no": #get the table data
         query = "SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, \
             cases_date.cases, cases_date.cases_increased, vaccinations_region.people_with_1_or_more_doses, vaccinations_region.people_with_1_or_more_doses_per_100K,\

@@ -63,7 +63,44 @@ function populateStateSelector() {
         createStateChart(methodname);
         changeCasesState(state_n);
         changeVaccinationsState(state_n);
+        createStateTable(state_n);
     }
+}
+
+function createStateTable(state_n) {
+    var url = getAPIBaseURL() + '/state_information?region_name=' + state_n;
+    fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(info => {
+            var listBody = '';
+            if (info.length === 0) { listBody += "<th>No data</th>" } else {
+                for (var k = 0; k < info.length; k++) {
+                    var infos = info[k];
+                    listBody += createTableStatement("Death:  ", infos["death"]);
+                    listBody += createTableStatement("Increase death number:  ", infos["deathIncrease"]);
+                    listBody += createTableStatement("Hospitalized number:  ", infos["hospitalized"]);
+                    listBody += createTableStatement("Currently hospitalized number:  ", infos["hospitalizedCurrently"]);
+                    listBody += createTableStatement("Increased hospitalized number:  ", infos["hospitalizedIncrease"]);
+                    listBody += createTableStatement("Total cases:  ", infos["cases"]);
+                    listBody += createTableStatement("Increased cases:  ", infos["cases_increased"]);
+                    listBody += createTableStatement("People with one or more doses:  ", infos["people_with_1_or_more_doses"]);
+                    listBody += createTableStatement("People with one or more doses per 100K:  ", infos["people_with_1_or_more_doses_per_100K"]);
+                    listBody += createTableStatement("People with two doses:  ", infos["people_with_2_doses"]);
+                    listBody += createTableStatement("People with two doses per 100K:  ", infos["people_with_2_doses_per_100K"]);
+                }
+            }
+
+            console.log(listBody);
+            document.getElementById('table').innerHTML = listBody;
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+}
+
+function createTableStatement(string1, string2) {
+    s = "<tr> <td> " + string1 + "</td>" + "<td>" + string2 + "</td></tr>";
+    return s;
 }
 
 function changeCasesState(stateName) {

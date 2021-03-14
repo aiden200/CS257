@@ -108,5 +108,35 @@ svg.ct-chart-line {
     text-decoration: none;
     display: block;
     background-size: cover;
-    
+}
+
+.table_container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+#table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+td {
+    text-align: right;
+    padding: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    color: white;
+    text-decoration: none;
+}
+
+tr:nth-child(even) {
+    background-color: #22273A;
+}
+
+tr:nth-child(odd) {
+    background-color: gray;
 }
