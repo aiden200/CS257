@@ -76,14 +76,14 @@ function createStateTable(state_n) {
             if (info.length === 0) { listBody += "<th>No data</th>" } else {
                 for (var k = 0; k < info.length; k++) {
                     var infos = info[k];
+                    listBody += createTableStatement("Total covid cases:  ", infos["cases"]);
+                    listBody += createTableStatement("People with one or more doses of the vaccination:  ", infos["people_with_1_or_more_doses"]);
                     listBody += createTableStatement("Deaths:  ", infos["death"]);
                     listBody += createTableStatement("Increased deaths:  ", infos["deathIncrease"]);
                     listBody += createTableStatement("Hospitalized:  ", infos["hospitalized"]);
                     listBody += createTableStatement("Currently hospitalized:  ", infos["hospitalizedCurrently"]);
                     listBody += createTableStatement("Increased hospitalized:  ", infos["hospitalizedIncrease"]);
-                    listBody += createTableStatement("Total covid cases:  ", infos["cases"]);
                     listBody += createTableStatement("Increased covid cases:  ", infos["cases_increased"]);
-                    listBody += createTableStatement("People with one or more doses of the vaccination:  ", infos["people_with_1_or_more_doses"]);
                     listBody += createTableStatement("People with one or more doses of the vaccination per 100K:  ", infos["people_with_1_or_more_doses_per_100K"]);
                     listBody += createTableStatement("People with two doses of the vaccination:  ", infos["people_with_2_doses"]);
                     listBody += createTableStatement("People with two doses of the vaccination per 100K:  ", infos["people_with_2_doses_per_100K"]);
@@ -92,6 +92,7 @@ function createStateTable(state_n) {
 
             console.log(listBody);
             document.getElementById('table').innerHTML = listBody;
+            document.getElementById('tableInfo').innerHTML = "<h1>Newest data from " + state_n + ": </h1>";
         })
         .catch(function(error) {
             console.log(error);
@@ -390,6 +391,3 @@ function abbrState(input, to) {
         }
     }
 }
-
-
-

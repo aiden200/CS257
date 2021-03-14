@@ -31,6 +31,7 @@ a:-webkit-any-link {
     height: 0;
     width: 80%;
     padding-bottom: 40%;
+    padding-left: 10%;
     /* My friend Shaun (Carleton CS '02) is even worse than I am at the details of
      * graphic design. So when he wants to make sure the designers don't preserve
      * his color choices, he makes stuff orange to force their hand. I am using
@@ -105,21 +106,27 @@ a:-webkit-any-link {
 /* Links inside the dropdown */
 
 .dropdown-content_a {
-    margin-top: -1px; /* Prevent double borders */
-    background-color: #cccccc; /* Grey background color */
-    padding: 5px; /* Add some padding */
-    text-decoration: none; /* Remove default text underline */
-    font-size: 18px; /* Increase the font-size */
-    color: black; /* Add a black text color */
+    margin-top: -1px;
+    /* Prevent double borders */
+    background-color: #cccccc;
+    /* Grey background color */
+    padding: 5px;
+    /* Add some padding */
+    text-decoration: none;
+    /* Remove default text underline */
+    font-size: 18px;
+    /* Increase the font-size */
+    color: black;
+    /* Add a black text color */
     border: 1px solid black;
     position: absolute;
     display: none;
 }
 
-
-.dropdown-content_a a:-webkit-any-link{
+.dropdown-content_a a:-webkit-any-link {
     color: black;
 }
+
 
 /* Change color of dropdown links on hover */
 
@@ -134,13 +141,13 @@ a:-webkit-any-link {
     display: block;
 }
 
-
-
 .chart-container {
-    display: inline-block;
-    width: 50%;
+    display: block;
+    width: 75%;
     margin: 20px;
     padding-bottom: 30px;
+    padding-left: 20%;
+    padding-top: 20px;
 }
 
 .container {
@@ -165,3 +172,6 @@ svg.ct-chart-line {
     white-space: nowrap;
 }
 
+#top_horizontal_square {
+    text-align: center;
+}

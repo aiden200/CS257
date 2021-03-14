@@ -112,16 +112,16 @@ function filterFunction() {
                     var infos = info[k];
                     let s = infos['region_name'] + '"'
                     listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + '</a>' + '</br>';
-                    
+
                 }
             }
 
 
             document.getElementById('list_container').innerHTML = listBody;
-        
-            
+
+
             document.getElementsByClassName("dropdown-content_a")[0].style.display = "block";
-            
+
         })
         .catch(function(error) {
             console.log(error);
@@ -144,11 +144,11 @@ function populateStateSelector() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
         // Populate it with states from the API
-        var stateSelectorBody = '<option value="increased_cases">increased cases</option>\n';
-        stateSelectorBody += '<option value="total_cases">total vaccination</option>\n';
-        stateSelectorBody += '<option value="people_with_1_or_more_doses">people with 1 or more doses</option>\n';
-        stateSelectorBody += '<option value="total_doses_administered_daily">total doses administered daily</option>\n';
-        stateSelectorBody += '<option value="people_with_2_doses">people with 2 doses</option>\n';
+        var stateSelectorBody = '<option value="increased_cases">increased cases in the US</option>\n';
+        stateSelectorBody += '<option value="total_cases">total cases in the US</option>\n';
+        stateSelectorBody += '<option value="people_with_1_or_more_doses">people with 1 or more doses in the US</option>\n';
+        stateSelectorBody += '<option value="total_doses_administered_daily">total doses administered daily in the US</option>\n';
+        stateSelectorBody += '<option value="people_with_2_doses">people with 2 doses in the US</option>\n';
 
         stateSelector.innerHTML = stateSelectorBody;
 
@@ -157,6 +157,9 @@ function populateStateSelector() {
 
         // Start us out looking at selected.
         var methodname = stateSelector.value;
+        var name = stateSelector.options[stateSelector.selectedIndex].text
+        var element = document.getElementById('state-new-cases-title');
+        element.innerHTML = '<h1> Information about ' + name + '</h1>';
         createStateChart(methodname);
     }
 }
@@ -168,7 +171,7 @@ function onStateSelectorChanged() {
         var methodname = stateSelector.value;
         createStateChart(methodname);
         var element = document.getElementById('state-new-cases-title');
-        element.innerHTML = '<h1> Information about ' + name + " in the US " + '</h1>';
+        element.innerHTML = '<h1> Information about ' + name + '</h1>';
     }
 }
 
@@ -275,11 +278,12 @@ function createStateChart(methodname) {
     });
 }
 
-function outsideClick(event, notelem)	{
+function outsideClick(event, notelem) {
     notelem = $(notelem); // jquerize (optional)
     // check outside click for multiple elements
-    var clickedOut = true, i, len = notelem.length;
-    for (i = 0;i < len;i++)  {
+    var clickedOut = true,
+        i, len = notelem.length;
+    for (i = 0; i < len; i++) {
         if (event.target == notelem[i] || notelem[i].contains(event.target)) {
             clickedOut = false;
         }
@@ -291,8 +295,8 @@ function outsideClick(event, notelem)	{
 var modal = document.getElementsByClassName("dropdown-content_a");
 
 window.addEventListener('click', function(e) {
-   if (outsideClick(e, modal)) {
-    document.getElementsByClassName("dropdown-content_a")[0].style.display = "none";
-   		
-   }
+    if (outsideClick(e, modal)) {
+        document.getElementsByClassName("dropdown-content_a")[0].style.display = "none";
+
+    }
 });

@@ -29,8 +29,6 @@ body {
     background-color: #264e86;
 }
 
-
-
 select {
     font-size: 16pt;
 }
@@ -44,6 +42,8 @@ select {
     border: 2px dashed gray;
     width: 50%;
     margin: 20px;
+    padding: 40px;
+    padding-top: 20px;
     padding-bottom: 50px;
 }
 
@@ -99,12 +99,18 @@ svg.ct-chart-line {
 /* Links inside the dropdown */
 
 .dropdown-content_a {
-    margin-top: -1px; /* Prevent double borders */
-    background-color: #cccccc; /* Grey background color */
-    padding: 5px; /* Add some padding */
-    text-decoration: none; /* Remove default text underline */
-    font-size: 18px; /* Increase the font-size */
-    color: black; /* Add a black text color */
+    margin-top: -1px;
+    /* Prevent double borders */
+    background-color: #cccccc;
+    /* Grey background color */
+    padding: 5px;
+    /* Add some padding */
+    text-decoration: none;
+    /* Remove default text underline */
+    font-size: 18px;
+    /* Increase the font-size */
+    color: black;
+    /* Add a black text color */
     border: 1px solid black;
     position: absolute;
     display: none;
@@ -112,10 +118,7 @@ svg.ct-chart-line {
 
 a:-webkit-any-link {
     color: black;
-    
 }
-
-
 
 .table_container {
     position: relative;
@@ -125,8 +128,6 @@ a:-webkit-any-link {
     padding-bottom: 50px;
     float: right;
     width: 40%;
-    
-    
 }
 
 #table {
@@ -135,7 +136,6 @@ a:-webkit-any-link {
     width: 100%;
     border: 1px solid #ddd;
     margin: 0 auto;
-    
 }
 
 td {
@@ -153,4 +153,15 @@ tr:nth-child(even) {
 
 tr:nth-child(odd) {
     background-color: gray;
+}
+
+#state {
+    display: block;
+    padding: 20px;
+}
+
+.starter-template {
+    display: block;
+    padding-top: 70px;
+    text-align: center;
 }

@@ -35,11 +35,12 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="about.html">About Us</a>
+                        <a class="nav-link active" href="http://localhost:5000/state_detail?state=California">State Covid Data</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="http://localhost:5000/state_detail?state=California">State covid data</a>
+                        <a class="nav-link active" href="about.html">About Us</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link active" href="source.html">About the Data</a>
                     </li>
@@ -68,14 +69,18 @@
     <!-- /.container -->
     <div id="background_boxes">
         <div id="top_horizontal_square">
+            <p>Click the map to get detailed information about a specific state</p>
             <div id="state-summary"></div>
             <div id="map-container"></div>
             <div id="basic info"></div>
         </div>
+        <!-- 
         <div class="header">
             <select id="method-select"></select>
         </div>
+        /.container -->
         <div class="chart-container">
+            <select id="method-select"></select>
             <div class="chart-title" id="state-new-cases-title"></div>
             <div class="ct-chart ct-perfect-fourth" id="state-new-cases-chart"></div>
             <div id="state-new-cases-tooltip" class="tooltip"> </div>

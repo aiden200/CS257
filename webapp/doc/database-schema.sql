@@ -8,7 +8,7 @@ CREATE TABLE vaccinations_region(
 	people_with_1_or_more_doses integer,
 	people_with_1_or_more_doses_per_100K integer,
 	people_with_2_doses integer,
-	people_with_2_doses_per_100K integer
+	people_with_2_doses_per_100K integer,
 );
 
 CREATE TABLE cases_date(
