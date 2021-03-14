@@ -111,14 +111,17 @@ function filterFunction() {
                 for (var k = 0; k < info.length; k++) {
                     var infos = info[k];
                     let s = infos['region_name'] + '"'
-                    listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + " cases: " + infos['cases'] + '</a>' + '</br>';
+                    listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + '</a>' + '</br>';
+                    
                 }
             }
 
 
             document.getElementById('list_container').innerHTML = listBody;
-            document.getElementById("list_container").classList.toggle("show");
-            document.getElementById("home").setAttribute("class", "highlight3");
+        
+            
+            document.getElementsByClassName("dropdown-content_a")[0].style.display = "block";
+            
         })
         .catch(function(error) {
             console.log(error);
@@ -165,7 +168,7 @@ function onStateSelectorChanged() {
         var methodname = stateSelector.value;
         createStateChart(methodname);
         var element = document.getElementById('state-new-cases-title');
-        element.innerHTML = '<h1> Imformation about ' + name + " in the US " + '</h1>';
+        element.innerHTML = '<h1> Information about ' + name + " in the US " + '</h1>';
     }
 }
 
@@ -271,3 +274,25 @@ function createStateChart(methodname) {
         console.log(error);
     });
 }
+
+function outsideClick(event, notelem)	{
+    notelem = $(notelem); // jquerize (optional)
+    // check outside click for multiple elements
+    var clickedOut = true, i, len = notelem.length;
+    for (i = 0;i < len;i++)  {
+        if (event.target == notelem[i] || notelem[i].contains(event.target)) {
+            clickedOut = false;
+        }
+    }
+    if (clickedOut) return true;
+    else return false;
+}
+
+var modal = document.getElementsByClassName("dropdown-content_a");
+
+window.addEventListener('click', function(e) {
+   if (outsideClick(e, modal)) {
+    document.getElementsByClassName("dropdown-content_a")[0].style.display = "none";
+   		
+   }
+});

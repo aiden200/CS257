@@ -38,7 +38,8 @@ def get_total_cases():
     '''
     contain_string = flask.request.args.get('region_contains', 'USA')
     connection = connect_to_database()
-    
+    if contain_string == '':
+        return []
     user_input = '%' + contain_string + '%'
     if contain_string == 'USA':
         query = "SELECT cases\

@@ -25,7 +25,7 @@ function initialize() {
     let Request = new Object();
     Request = GetRequest();
     state_n = Request['state'];
-    element.innerHTML = '<h1> Imformation about ' + state_n + ": " + '</h1>';
+    element.innerHTML = '<h1> Information about ' + state_n + ": " + '</h1>';
     populateStateSelector();
 }
 
@@ -46,10 +46,10 @@ function populateStateSelector() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
         // Populate it with states from the API
-        var stateSelectorBody = '<option value="cases_increased">Number of increased cases</option>\n';
-        stateSelectorBody += '<option value="cases">Number of total cases</option>\n';
-        stateSelectorBody += '<option value="death">Number of death</option>\n';
-        stateSelectorBody += '<option value="deathIncrease">Number of increased death</option>\n';
+        var stateSelectorBody = '<option value="cases_increased">Number of increased covid cases</option>\n';
+        stateSelectorBody += '<option value="cases">Number of total covid cases</option>\n';
+        stateSelectorBody += '<option value="death">Number of deaths</option>\n';
+        stateSelectorBody += '<option value="deathIncrease">Number of increased deaths</option>\n';
         stateSelectorBody += '<option value="hospitalized">Number of hospitalized people</option>\n';
         stateSelectorBody += '<option value="hospitalizedCurrently"> Number of currently hospitalized people</option>\n';
         stateSelectorBody += '<option value="hospitalizedIncrease">Number of increased hospitalized people</option>\n';
@@ -76,17 +76,17 @@ function createStateTable(state_n) {
             if (info.length === 0) { listBody += "<th>No data</th>" } else {
                 for (var k = 0; k < info.length; k++) {
                     var infos = info[k];
-                    listBody += createTableStatement("Death:  ", infos["death"]);
-                    listBody += createTableStatement("Increase death number:  ", infos["deathIncrease"]);
-                    listBody += createTableStatement("Hospitalized number:  ", infos["hospitalized"]);
-                    listBody += createTableStatement("Currently hospitalized number:  ", infos["hospitalizedCurrently"]);
-                    listBody += createTableStatement("Increased hospitalized number:  ", infos["hospitalizedIncrease"]);
-                    listBody += createTableStatement("Total cases:  ", infos["cases"]);
-                    listBody += createTableStatement("Increased cases:  ", infos["cases_increased"]);
-                    listBody += createTableStatement("People with one or more doses:  ", infos["people_with_1_or_more_doses"]);
-                    listBody += createTableStatement("People with one or more doses per 100K:  ", infos["people_with_1_or_more_doses_per_100K"]);
-                    listBody += createTableStatement("People with two doses:  ", infos["people_with_2_doses"]);
-                    listBody += createTableStatement("People with two doses per 100K:  ", infos["people_with_2_doses_per_100K"]);
+                    listBody += createTableStatement("Deaths:  ", infos["death"]);
+                    listBody += createTableStatement("Increased deaths:  ", infos["deathIncrease"]);
+                    listBody += createTableStatement("Hospitalized:  ", infos["hospitalized"]);
+                    listBody += createTableStatement("Currently hospitalized:  ", infos["hospitalizedCurrently"]);
+                    listBody += createTableStatement("Increased hospitalized:  ", infos["hospitalizedIncrease"]);
+                    listBody += createTableStatement("Total covid cases:  ", infos["cases"]);
+                    listBody += createTableStatement("Increased covid cases:  ", infos["cases_increased"]);
+                    listBody += createTableStatement("People with one or more doses of the vaccination:  ", infos["people_with_1_or_more_doses"]);
+                    listBody += createTableStatement("People with one or more doses of the vaccination per 100K:  ", infos["people_with_1_or_more_doses_per_100K"]);
+                    listBody += createTableStatement("People with two doses of the vaccination:  ", infos["people_with_2_doses"]);
+                    listBody += createTableStatement("People with two doses of the vaccination per 100K:  ", infos["people_with_2_doses_per_100K"]);
                 }
             }
 
@@ -390,3 +390,6 @@ function abbrState(input, to) {
         }
     }
 }
+
+
+

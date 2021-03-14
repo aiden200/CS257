@@ -105,15 +105,21 @@ a:-webkit-any-link {
 /* Links inside the dropdown */
 
 .dropdown-content_a {
-    background-repeat: repeat;
-    color: #3fc1c9;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #cccccc; /* Grey background color */
+    padding: 5px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    font-size: 18px; /* Increase the font-size */
+    color: black; /* Add a black text color */
+    border: 1px solid black;
     position: absolute;
-    padding: 15px 11px;
-    text-decoration: none;
-    display: block;
-    background-size: cover;
+    display: none;
 }
 
+
+.dropdown-content_a a:-webkit-any-link{
+    color: black;
+}
 
 /* Change color of dropdown links on hover */
 
@@ -128,13 +134,7 @@ a:-webkit-any-link {
     display: block;
 }
 
-#home {
-    background-color: #AAA;
-    min-width: 230px;
-    border: 1px solid #ddd;
-    z-index: 1;
-    font-size: 10px;
-}
+
 
 .chart-container {
     display: inline-block;
@@ -164,3 +164,4 @@ svg.ct-chart-line {
     transform: translate(-100%) rotate(-45deg);
     white-space: nowrap;
 }
+

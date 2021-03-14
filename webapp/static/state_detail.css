@@ -29,9 +29,7 @@ body {
     background-color: #264e86;
 }
 
-a:-webkit-any-link {
-    color: #5E88fc;
-}
+
 
 select {
     font-size: 16pt;
@@ -101,18 +99,34 @@ svg.ct-chart-line {
 /* Links inside the dropdown */
 
 .dropdown-content_a {
-    background-repeat: repeat;
-    color: #3fc1c9;
+    margin-top: -1px; /* Prevent double borders */
+    background-color: #cccccc; /* Grey background color */
+    padding: 5px; /* Add some padding */
+    text-decoration: none; /* Remove default text underline */
+    font-size: 18px; /* Increase the font-size */
+    color: black; /* Add a black text color */
+    border: 1px solid black;
     position: absolute;
-    padding: 15px 11px;
-    text-decoration: none;
-    display: block;
-    background-size: cover;
+    display: none;
 }
 
+a:-webkit-any-link {
+    color: black;
+    
+}
+
+
+
 .table_container {
-    width: 80%;
-    margin: 0 auto;
+    position: relative;
+    background-position-x: left;
+    padding: 10px;
+    margin: 20px;
+    padding-bottom: 50px;
+    float: right;
+    width: 40%;
+    
+    
 }
 
 #table {
@@ -121,11 +135,11 @@ svg.ct-chart-line {
     width: 100%;
     border: 1px solid #ddd;
     margin: 0 auto;
-    margin-bottom: 100px;
+    
 }
 
 td {
-    text-align: right;
+    text-align: center;
     padding: 3px;
     white-space: nowrap;
     overflow: hidden;
