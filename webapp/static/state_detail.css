@@ -39,7 +39,7 @@ select {
 
 .chart-container {
     display: inline-block;
-    border: 2px dashed gray;
+    
     width: 50%;
     margin: 20px;
     padding: 40px;

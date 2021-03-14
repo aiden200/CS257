@@ -345,8 +345,15 @@ button:focus:not(:focus-visible) {
     outline: 0
 }
 
+
+input{
+    width:100%;
+    margin: 0;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit
+}
 button,
-input,
 optgroup,
 select,
 textarea {
