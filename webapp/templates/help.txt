@@ -38,8 +38,8 @@ RESPONSE: a JSON list of dictionaries, each of which represents one
 state's total vaccinations, sorted in cases, by a descending order. Each dictionary in this
 list will have the following fields.
 
-   region_name -- (TEXT) the state name
-   total_vaccinations -- (INTEGER) the total cases in that state
+   region_name -- (string) the state name
+   total_vaccinations -- (int) the total cases in that state
 
 REQUEST: /total_vaccinations?region_contains={state_keyword}
 
@@ -51,11 +51,11 @@ REQUEST: /total_vaccinations?region_contains={state_keyword}
     parameter as a key(string), and the value as the vaccinations of latest date for that state.
 
     if no parameter entered, the dictionary will returns a number that represents the total vaccination in the us.
-        total_vaccinations -- (INTEGER) the total cases in that state
+        total_vaccinations -- (int) the total cases in that state
     
     if the only parameter is entered, it will return the full response indecated above.
-        region_name -- (TEXT) the state name
-        total_vaccinations -- (INTEGER) the total cases in that state
+        region_name -- (string) the state name
+        total_vaccinations -- (int) the total cases in that state
 
 EXAMPLE(S):
     /total_vaccinations
@@ -79,16 +79,61 @@ REQUEST: /total_cases?region_contains={state_keyword}
         If an optional argument is specified, this will return a JSON dictionary with each state containing the 
         state_keyword parameter as a key(string), and the value as the cases of the latest date for that state.
 
-        if no parameter entered, the dictionary will returns a number that represents the total cases in the us.
+        if no parameter entered, the dictionary will return a number that represents the total cases in the us.
             total_vaccinations -- (INTEGER) the total cases in that state
     
         if the only parameter is entered, it will return the full response indecated above.
-            region_name -- (TEXT) the state name
-            total_vaccinations -- (INTEGER) the total cases in that state
+            region_name -- (string) the state name
+            total_vaccinations -- (int) the total cases in that state
 
 EXAMPLE(S):
     /total_cases
         28350657
+    
+    /total_cases?region_contains=CA
+    [{"region_name": "California", "cases": 3475562}, {"region_name": "North Carolina", "cases": 858548}, {"region_name": "South Carolina", "cases": 516823}]
+
+    /total_cases?region_contains=California
+    [{"region_name": "California", "cases": 3475562}]
+
+------------------------------------------------------------------------------
+
+REQUEST: /total_cases_and_vaccination
+
+    RESPONSE: a JSON list of dictionaries. Each dictionary contains each state in America, with the following fields:
+        region_name -- (string) the region name                                                
+        vaccination -- (int) the number of vaccinations(for the most recent date) of the corresponding region
+        case -- (int) the number of cases(for the most recent date) of the corresponding region
+
+EXAMPLE(S):
+    /total_cases_and_vaccination
+    [[{"region_name": "Vermont", "vaccination": 94486, "cases": 15198}, {"region_name": "Hawaii", "vaccination": 223785, "cases": 28326} ..... ]
+    
+------------------------------------------------------------------------------
+
+REQUEST: /increased_cases_by_date?[region_name={state},given_date={date}]
+
+    GET parameters:
+        region_name(optional, default:USA)
+        given_date(optional,default:0)
+
+    RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
+    the dictionary will contain the increased cases by day for the United States with the following fields. 
+        name -- (string) the region name                                                
+        incrased_cases -- (list) list that contains the date and the increased cases of the date given with the format of each value in the list as date:case
+        
+    If only the state optional argument is given, the dictionary will contain increased cases by day for the specified state. The dictionary will have the following fields.
+        name -- (string) the region name
+        increased_cases -- (list) list that contains the date and the increased cases of the date given with the format of each value in the list as date:case
+
+    If both optional arguments are given, the dictionary will contain the increased cases of the specified date with the following fields.
+        name -- (string) the region name
+        date -- (string) the requested date
+        case -- (int) the increased cases on the date
+
+EXAMPLE(S):
+    /increased_cases_by_date
+    [{"day": "2020-01-14", "increased_cases": 0}, {"day": "2020-01-15", "increased_cases": 0}...]
     
     /total_cases?region_contains=CA
     [{"region_name": "California", "cases": 3475562}, {"region_name": "North Carolina", "cases": 858548}, {"region_name": "South Carolina", "cases": 516823}]
