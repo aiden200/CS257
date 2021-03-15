@@ -164,6 +164,19 @@ function populateStateSelector() {
     }
 }
 
+function getFormInfo() {
+    var s = document.getElementById("myInput").value;
+    var list = s.split(" ");
+    if (list.length == 2) {
+        state_n = list[0].substring(0, 1).toUpperCase() + list[0].substring(1) + " " + list[1].substring(0, 1).toUpperCase() + list[1].substring(1);
+    } else {
+        state_n = s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+    var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + state_n;
+    window.location.href = url;
+
+}
+
 function onStateSelectorChanged() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {

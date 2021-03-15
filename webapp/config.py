@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
 database = 'covid'
-user = 'aidenchang'
+user = 'postgres'
 password = 'zsy'
 
