@@ -26,7 +26,8 @@ function getAPIBaseURL() {
 
 function initialize() {
     initializeMap();
-    methodStateSelector();
+    getUSCovidAndVaccination();
+    methodSelector();
 }
 //initialize the map
 function initializeMap() {
@@ -134,7 +135,7 @@ function onStateClick(geography) {
 
 }
 
-function methodStateSelector() {
+function methodSelector() {
     // create the the drop-down list with the list of states from the API.
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
@@ -158,19 +159,26 @@ function methodStateSelector() {
         createStateChart(methodname);
     }
 }
-//get the form info and capitalize the first charactor in each  word to make it recognizable by the api
-//for example, if user enters "north dakota", getFormInfo will change it to "North Dakota".
-function getFormInfo() {
-    var s = document.getElementById("myInput").value;
-    var list = s.split(" ");
-    if (list.length == 2) {
-        state_n = list[0].substring(0, 1).toUpperCase() + list[0].substring(1) + " " + list[1].substring(0, 1).toUpperCase() + list[1].substring(1);
-    } else {
-        state_n = s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
-    var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + state_n;
-    window.location.href = url;
+//get the latest covid and vaccination data in the US
+function getUSCovidAndVaccination() {
+    console.log("yes");
+    var url = getAPIBaseURL() + '/us_information';
+    fetch(url, { method: 'get' })
+        .then((response) => response.json())
+        .then(info => {
+            var covid_vaccination = ""
+            for (var k = 0; k < info.length; k++) {
+                var infos = info[k];
+                if (infos["day"] == "2021-02-28") {
+                    covid_vaccination = "<h3> Total cases: " + infos["total_cases"] + "</h3>" + "<h3>Total vaccinations: " + infos["people_with_1_or_more_doses"] + "</h3>";
+                }
+            }
 
+            document.getElementById('CovidAndVaccination').innerHTML = covid_vaccination;
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
 }
 //Create the title of the graph
 function onStateSelectorChanged() {

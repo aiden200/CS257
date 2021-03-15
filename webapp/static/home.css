@@ -62,8 +62,6 @@ a:-webkit-any-link {
     padding: 5px;
 }
 
-
-
 #myInput {
     /* Add a search icon to input we don't have this image yet????*/
     /* Position the search icon */
@@ -74,7 +72,6 @@ a:-webkit-any-link {
     /* Increase font-size */
     /* Add some padding */
     /* Add a grey border */
-    
     /* Add some space below the input */
     box-sizing: border-box;
     background-repeat: no-repeat;
@@ -176,5 +173,9 @@ svg.ct-chart-line {
 }
 
 #top_horizontal_square {
+    text-align: center;
+}
+
+.chart-title {
     text-align: center;
 }
