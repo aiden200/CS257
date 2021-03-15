@@ -249,9 +249,6 @@ def get_increased_cases_by_date():
             name -- (string) the region name                                                
             incrased_cases -- (list) list that contains the date and the increased cases of the date given with the format of each value in the list as date:case
             
-        If only the state optional argument is given, the dictionary will contain increased cases by day for the specified state. The dictionary will have the following fields.
-            name -- (string) the region name
-            increased_cases -- (list) list that contains the date and the increased cases of the date given with the format of each value in the list as date:case
 
         If both optional arguments are given, the dictionary will contain the increased cases of the specified date with the following fields.
             name -- (string) the region name
@@ -283,23 +280,7 @@ def get_increased_cases_by_date():
                 return_list.append(in_dic)
             connection.close()
             return json.dumps(return_list)
-        else:
-            '''
-            case where only region_name is given
-            '''
-            query = "SELECT DISTINCT cases_date.day, cases_date.cases_increased\
-                FROM cases_date\
-                WHERE cases_date.states = %s\
-                ORDER BY cases_date.day;"
-            cursor = getCursor(query, connection, region_name)
-            
-            for row in cursor:
-                in_dic = {}
-                in_dic["day"] = str(row[0])
-                in_dic["increased_cases"] = row[1]              
-                return_list.append(in_dic)
-            connection.close()
-            return json.dumps(return_list)
+    
     else:
         '''
         case where both parameters are given
@@ -508,21 +489,37 @@ def get_state_information():
         REQUEST: /state_information?[region_name={state}&historical_data={YesOrNo}&tableInfo={YesOrNo}]
 
         GET parameters:
-            region_contains(optional, default:USA)
+            region_name(required) -- the region name
+            historical_data(optional,'no') -- requesting historical data
+            tableInfo(optional,'yes') -- requesting table data
 
-        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If no optional arguments are given, 
-        the dictionary will contain cases by day for the United States with the following fields. 
-            name -- (string) the region name                                                
-            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
+
+        RESPONSE: A JSON list of dictionaries, each of which represents a dataset in one day, sorted by date. If the 
+        tableInfo argument is set to 'yes' and historical data to 'no' each dictionary will contain the following fields sorted by date
+            state -- (string) the region name                                                
+            day -- (string) the date
+            death -- (int) the number of deaths on that day due to covid
+            deathIncrease -- (int) the number of death increases on that day due to covid
+            hospitalized -- (int) the accumilative number of hospitalized on that day
+            hospitalizedCurrently -- (int) current number of hospitalized on that day
+            hospitalizedIncrease -- (int) increase hospitalization on that day
+            cases -- (int) cases of covid on that day
+            cases_increased -- (int) cases of covid increased on that day
+            people_with_1_or_more_doses -- (int) total people of one or more doses of vaccination
+            people_with_1_or_more_doses_per_100K -- (int) total people of one or more doses of vaccination per 100k
+            people_with_2_doses -- (int) total people of two or more doses of vaccination
+            people_with_2_doses_per_100K -- (int) total people of two or more doses of vaccination per 100k
             
-        If only the state optional argument is given, the dictionary will contain cases by day for the specified state. The dictionary will have the following fields.
-            name -- (string) the region name
-            cases_dates -- (list) list that contains the date and the case of the date given with the format of each value in the list as date:case
-
-        If both optional arguments are given, the dictionary will contain the case of the specified date with the following fields.
-            name -- (string) the region name
-            date -- (string) the requested date
-            case -- (int) the cases on the date
+        If the argument historical_data is 'yes' each dictionary will return the following fields sorted by date
+            state -- (string) the region name                                                
+            day -- (string) the date
+            death -- (int) the number of deaths on that day due to covid
+            deathIncrease -- (int) the number of death increases on that day due to covid
+            hospitalized -- (int) the accumilative number of hospitalized on that day
+            hospitalizedCurrently -- (int) current number of hospitalized on that day
+            hospitalizedIncrease -- (int) increase hospitalization on that day
+            cases -- (int) cases of covid on that day
+            cases_increased -- (int) cases of covid increased on that day
     '''
     region_name = flask.request.args.get('region_name')
     historical_data = flask.request.args.get('historical_data','no')
@@ -530,7 +527,7 @@ def get_state_information():
     connection = connect_to_database()
     query = ''
     return_list = []
-    if tableInfo == 'yes' and historical_data == "no": #get the table data
+    if tableInfo == 'yes' and historical_data == "no": 
         query = "SELECT DISTINCT  states_code.states, cases_date.day, cases_date.death, cases_date.deathIncrease, cases_date.hospitalized, cases_date.hospitalizedCurrently, cases_date.hospitalizedIncrease, \
             cases_date.cases, cases_date.cases_increased, vaccinations_region.people_with_1_or_more_doses, vaccinations_region.people_with_1_or_more_doses_per_100K,\
             vaccinations_region.people_with_2_doses, vaccinations_region.people_with_2_doses_per_100K\
