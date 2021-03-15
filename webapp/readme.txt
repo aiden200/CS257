@@ -1,4 +1,4 @@
-AUTHORS: Silas Zhao Aiden Cheng 
+AUTHORS: Silas Zhao, Aiden Cheng 
 
 DATA: all covid and vaccinations information in the US
 
