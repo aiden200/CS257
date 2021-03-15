@@ -17,18 +17,18 @@
  */
 
 window.onload = initialize;
-
+//the state that this page describes about
 var state_n = ""
-
+    //initialize the function, get the state_n variable from the url using GetRequest();
 function initialize() {
     var element = document.getElementById('state');
     let Request = new Object();
     Request = GetRequest();
     state_n = Request['state'];
     element.innerHTML = '<h1> Information about ' + state_n + ": " + '</h1>';
-    populateStateSelector();
+    methodSelector();
 }
-
+//get the parameter value in the url
 function GetRequest() {
     const url = location.search;
     let theRequest = new Object();
@@ -41,8 +41,8 @@ function GetRequest() {
     }
     return theRequest;
 }
-
-function populateStateSelector() {
+//creating the dropdown list of methods and create the chart and table.
+function methodSelector() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
         // Populate it with states from the API
@@ -56,18 +56,18 @@ function populateStateSelector() {
         stateSelector.innerHTML = stateSelectorBody;
         console.log(stateSelectorBody);
         // Set the new-selection handler
-        stateSelector.onchange = onStateSelectorChanged;
+        stateSelector.onchange = onMethodSelectorChanged;
 
         // Start us out looking at selected.
         var methodname = stateSelector.value;
         createStateChart(methodname);
         changeCasesState(state_n);
         changeVaccinationsState(state_n);
-        createStateTable(state_n);
+        createStateTable();
     }
 }
-
-function createStateTable(state_n) {
+//create table by the given state name.
+function createStateTable() {
     var url = getAPIBaseURL() + '/state_information?region_name=' + state_n;
     fetch(url, { method: 'get' })
         .then((response) => response.json())
@@ -98,12 +98,12 @@ function createStateTable(state_n) {
             console.log(error);
         });
 }
-
+//changes the table content to HTML version
 function createTableStatement(string1, string2) {
     s = "<tr> <td> " + string1 + "</td>" + "<td>" + string2 + "</td></tr>";
     return s;
 }
-
+//change the state information in the table
 function changeCasesState(stateName) {
     var url = getAPIBaseURL() + '/total_cases?region_contains=' + stateName;
     fetch(url, { method: 'get' })
@@ -124,7 +124,7 @@ function changeCasesState(stateName) {
             console.log(error);
         });
 }
-
+//change the vaccination in the table
 function changeVaccinationsState(stateName) {
     var url = getAPIBaseURL() + '/total_vaccinations?region_contains=' + stateName;
     fetch(url, { method: 'get' })
@@ -147,28 +147,13 @@ function changeVaccinationsState(stateName) {
             console.log(error);
         });
 }
-
+//get basic url
 function getAPIBaseURL() {
     var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
     return baseURL;
 }
-
-function getFormInfo() {
-    console.log()
-    var s = document.getElementById("myInput").value;
-    var list = s.split(" ");
-    if (list.length == 2) {
-        state_n = list[0].substring(0, 1).toUpperCase() + list[0].substring(1) + " " + list[1].substring(0, 1).toUpperCase() + list[1].substring(1);
-    } else {
-        state_n = s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
-    var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + state_n;
-    console.log("yes");
-    window.location.href = url;
-
-}
-
-function onStateSelectorChanged() {
+//update the data when choosing a new method
+function onMethodSelectorChanged() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
         var methodname = stateSelector.value;
@@ -179,7 +164,7 @@ function onStateSelectorChanged() {
         changeVaccinationsState(stateName);
     }
 }
-
+//create the chart by the given method name
 function createStateChart(methodname) {
     // Set the title
     var stateSelector = document.getElementById('method-select');

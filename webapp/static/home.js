@@ -26,9 +26,9 @@ function getAPIBaseURL() {
 
 function initialize() {
     initializeMap();
-    populateStateSelector();
+    methodStateSelector();
 }
-
+//initialize the map
 function initializeMap() {
     var url = getAPIBaseURL() + '/total_cases_and_vaccination';
     console.log(url);
@@ -69,7 +69,7 @@ function initializeMap() {
 function onMapDone(dataMap) {
     dataMap.svg.selectAll('.datamaps-subunit').on('click', onStateClick);
 }
-
+//create the pop up template
 function hoverPopupTemplate(geography, data) {
     var template = '<div class="hoverpopup"><strong>' + geography.properties.name + '</strong><br>\n';
     template += getStateInfo(geography.properties.name);
@@ -77,7 +77,7 @@ function hoverPopupTemplate(geography, data) {
     return template;
 
 }
-
+//create the HTML version of statename for pop up template 
 function getStateInfo(statename) {
     var info = extraStateInfo[statename];
     var s = '<strong>Cases: </strong>' + info['cases'] + '<br>\n';
@@ -99,7 +99,7 @@ window.onclick = function(event) {
     }
 }
 
-
+//create the HTML content under the search bar
 function filterFunction() {
     var input = document.getElementById("myInput");
     var url = getAPIBaseURL() + '/total_cases?region_contains=' + input.value;
@@ -112,14 +112,9 @@ function filterFunction() {
                     var infos = info[k];
                     let s = infos['region_name'] + '"'
                     listBody += '<a href="/state_detail?state=' + s + 'class="home">' + infos['region_name'] + '</a>' + '</br>';
-
                 }
             }
-
-
             document.getElementById('list_container').innerHTML = listBody;
-
-
             document.getElementsByClassName("dropdown-content_a")[0].style.display = "block";
 
         })
@@ -132,18 +127,18 @@ function getAPIBaseURL() {
     var baseURL = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/api';
     return baseURL;
 }
-
+//click a certain part of the map to enter the state_detail page
 function onStateClick(geography) {
     var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + '/state_detail?state=' + geography.properties.name;
     window.location.href = url;
 
 }
 
-function populateStateSelector() {
-    // Populate the the drop-down list with the list of states from the API.
+function methodStateSelector() {
+    // create the the drop-down list with the list of states from the API.
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
-        // Populate it with states from the API
+        // create the drop down list
         var stateSelectorBody = '<option value="increased_cases">increased cases in the US</option>\n';
         stateSelectorBody += '<option value="total_cases">total cases in the US</option>\n';
         stateSelectorBody += '<option value="people_with_1_or_more_doses">people with 1 or more doses in the US</option>\n';
@@ -163,7 +158,8 @@ function populateStateSelector() {
         createStateChart(methodname);
     }
 }
-
+//get the form info and capitalize the first charactor in each  word to make it recognizable by the api
+//for example, if user enters "north dakota", getFormInfo will change it to "North Dakota".
 function getFormInfo() {
     var s = document.getElementById("myInput").value;
     var list = s.split(" ");
@@ -176,7 +172,7 @@ function getFormInfo() {
     window.location.href = url;
 
 }
-
+//Create the title of the graph
 function onStateSelectorChanged() {
     var stateSelector = document.getElementById('method-select');
     if (stateSelector) {
@@ -187,7 +183,7 @@ function onStateSelectorChanged() {
         element.innerHTML = '<h1> Information about ' + name + '</h1>';
     }
 }
-
+//create the chart by a specific methodname
 function createStateChart(methodname) {
     // Create the chart
     var url = getAPIBaseURL() + "/us_information";
@@ -290,26 +286,3 @@ function createStateChart(methodname) {
         console.log(error);
     });
 }
-
-function outsideClick(event, notelem) {
-    notelem = $(notelem); // jquerize (optional)
-    // check outside click for multiple elements
-    var clickedOut = true,
-        i, len = notelem.length;
-    for (i = 0; i < len; i++) {
-        if (event.target == notelem[i] || notelem[i].contains(event.target)) {
-            clickedOut = false;
-        }
-    }
-    if (clickedOut) return true;
-    else return false;
-}
-
-var modal = document.getElementsByClassName("dropdown-content_a");
-
-window.addEventListener('click', function(e) {
-    if (outsideClick(e, modal)) {
-        document.getElementsByClassName("dropdown-content_a")[0].style.display = "none";
-
-    }
-});
