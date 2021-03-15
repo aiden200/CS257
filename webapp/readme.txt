@@ -33,4 +33,5 @@ Things are working:
             Number of increased hospitalized people 
         -get the table that shows the latest information about covid and vaccination.
 
+Please don't forgot to change the config.py when loading our data.
 Thank you for reading this:) have a great day
